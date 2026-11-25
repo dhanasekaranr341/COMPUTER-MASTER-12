@@ -1,0 +1,2046 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12th Computer Science - 1 Mark Game | Dhanasekaran</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --accent-purple: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --opt-bg: #263349;
+            --pill-bg: #1e293b;
+        }
+
+        body.light-mode {
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-input: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+            --opt-bg: #f8fafc;
+            --pill-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+            transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* TOP NAVBAR */
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            gap: 8px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .home-icon-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 1.15rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .teacher-info {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .teacher-name {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .sub-title-nav {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .choco-badge {
+            background: #451a03;
+            color: #fbbf24;
+            border: 1px solid #92400e;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .lang-switch-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 6px 13px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+        }
+
+        .icon-circle-btn {
+            background: var(--opt-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 16px auto;
+            padding: 0 14px;
+        }
+
+        /* HERO BANNER */
+        .hero-banner {
+            background: var(--accent-purple);
+            border-radius: 20px;
+            padding: 22px 20px;
+            color: white;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+        }
+
+        .badge-pill {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .hero-banner h1 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .hero-banner p {
+            font-size: 0.85rem;
+            opacity: 0.92;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .progress-card {
+            background: rgba(15, 23, 42, 0.35);
+            padding: 12px 14px;
+            border-radius: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.2);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: #22c55e;
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* STUDENT DETAILS CARD */
+        .card-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .card-header-row h2 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .saved-tag {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .student-grid-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .input-group input {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #6366f1;
+        }
+
+        .proceed-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* CUSTOM INLINE MESSAGE ALERT (NO browser alert()) */
+        .inline-toast {
+            background: rgba(239, 68, 68, 0.18);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            text-align: center;
+            display: none;
+        }
+        body.light-mode .inline-toast {
+            color: #b91c1c;
+            background: #fee2e2;
+        }
+
+        /* GAME MODES SECTION */
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin: 18px 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mode-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-2px);
+            border-color: #6366f1;
+        }
+
+        .mode-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .mode-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .mode-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* LESSONS LIST */
+        #lessons-selection-view { display: none; }
+
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .lesson-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .lesson-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        .lesson-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .lesson-badge {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .lesson-q-badge {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+        }
+
+        .lesson-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.38;
+        }
+
+        /* QUIZ PLAY SCREEN - MATCHING SCREENSHOT 2 SUB-HEADER BAR */
+        #quiz-view { display: none; }
+
+        .quiz-sub-navbar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .sub-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pill-home-btn {
+            background: var(--opt-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pill-home-btn:hover {
+            border-color: #6366f1;
+        }
+
+        .student-meta-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #818cf8;
+        }
+        body.light-mode .student-meta-text {
+            color: #4f46e5;
+        }
+
+        .student-meta-school {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .sub-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .q-counter-pill {
+            background: rgba(99, 102, 241, 0.16);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            padding: 5px 11px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+        body.light-mode .q-counter-pill {
+            color: #4338ca;
+            background: #eef2ff;
+        }
+
+        .score-pill {
+            background: rgba(34, 197, 94, 0.16);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            padding: 5px 11px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+        body.light-mode .score-pill {
+            color: #15803d;
+            background: #dcfce7;
+        }
+
+        .scorecard-pill-btn {
+            background: rgba(245, 158, 11, 0.18);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 5px 11px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        body.light-mode .scorecard-pill-btn {
+            color: #b45309;
+            background: #fef3c7;
+        }
+
+        /* QUESTION NUMBER JUMP STRIP (Like 28, 29, 30... in screenshot 2) */
+        .q-number-strip {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 4px 2px 10px;
+            margin-bottom: 8px;
+            scrollbar-width: thin;
+        }
+
+        .q-num-dot {
+            min-width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .q-num-dot.active {
+            background: #4f46e5;
+            color: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+        }
+
+        .q-num-dot.solved-dot {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+        .q-num-dot.active.solved-dot {
+            background: #16a34a;
+            color: #ffffff;
+        }
+
+        /* QUESTION BOX */
+        .q-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .q-unit-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .unit-tag-pill {
+            background: rgba(139, 92, 246, 0.16);
+            color: #a78bfa;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+        body.light-mode .unit-tag-pill {
+            color: #6d28d9;
+            background: #ede9fe;
+        }
+
+        .q-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .q-text {
+            font-size: 1.06rem;
+            font-weight: 700;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .q-num-prefix {
+            color: #6366f1;
+            font-weight: 800;
+            margin-right: 4px;
+        }
+
+        .speaker-btn {
+            background: rgba(37, 99, 235, 0.18);
+            color: #60a5fa;
+            border: 1px solid rgba(37, 99, 235, 0.35);
+            padding: 7px 12px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        body.light-mode .speaker-btn {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        .speaker-btn:active { transform: scale(0.96); }
+
+        /* HINT BUTTON & EXPANDABLE HINT BOX (BETWEEN QUESTION & OPTIONS) */
+        .hint-bar-row {
+            margin-bottom: 14px;
+        }
+
+        .hint-toggle-btn {
+            background: rgba(245, 158, 11, 0.16);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 7px 14px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        body.light-mode .hint-toggle-btn {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .hint-content-box {
+            display: none;
+            margin-top: 10px;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: var(--text-main);
+        }
+
+        .hint-label-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #f59e0b;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        /* OPTIONS STACK */
+        .options-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: var(--opt-bg);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 16px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.96rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .opt-btn:hover:not(:disabled) {
+            border-color: #6366f1;
+        }
+
+        .opt-btn.correct {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-color: #22c55e !important;
+            color: #22c55e !important;
+        }
+
+        .opt-btn.wrong {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border-color: #ef4444 !important;
+            color: #ef4444 !important;
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .ctrl-btn {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .ctrl-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .ctrl-btn.primary {
+            background: #4f46e5;
+            color: white;
+            border: none;
+        }
+
+        /* UPGRADED PANDA HEAD-BONK 3-HIT ANIMATION OVERLAY */
+        #panda-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .panda-box {
+            background: #1e293b;
+            border: 3px solid #ef4444;
+            border-radius: 26px;
+            padding: 24px 20px;
+            text-align: center;
+            max-width: 390px;
+            width: 100%;
+            color: white;
+            box-shadow: 0 20px 50px rgba(239, 68, 68, 0.35);
+        }
+
+        .bonk-svg-stage {
+            width: 100%;
+            height: 175px;
+            margin-bottom: 10px;
+            overflow: visible;
+        }
+
+        /* Panda arm + mallet swings down onto student head 3 times (at 18%, 50%, 82%) */
+        @keyframes malletSwing3 {
+            0%   { transform: rotate(-45deg); }
+            12%  { transform: rotate(-65deg); }
+            18%  { transform: rotate(38deg); }  /* HIT 1 */
+            28%  { transform: rotate(-55deg); }
+            44%  { transform: rotate(-65deg); }
+            50%  { transform: rotate(38deg); }  /* HIT 2 */
+            60%  { transform: rotate(-55deg); }
+            76%  { transform: rotate(-65deg); }
+            82%  { transform: rotate(38deg); }  /* HIT 3 */
+            100% { transform: rotate(-45deg); }
+        }
+
+        @keyframes pandaBodyLunge3 {
+            0%, 100% { transform: translateX(0px); }
+            18%, 50%, 82% { transform: translateX(14px); }
+            30%, 62% { transform: translateX(2px); }
+        }
+
+        @keyframes studentHeadSquash3 {
+            0%, 100% { transform: translateY(0px) scaleY(1) rotate(0deg); }
+            16% { transform: translateY(0px) scaleY(1); }
+            19% { transform: translateY(18px) scaleY(0.78) scaleX(1.12) rotate(10deg); } /* BONKED 1 */
+            28% { transform: translateY(-3px) scaleY(1.03) rotate(-4deg); }
+            48% { transform: translateY(0px) scaleY(1); }
+            51% { transform: translateY(18px) scaleY(0.78) scaleX(1.12) rotate(10deg); } /* BONKED 2 */
+            60% { transform: translateY(-3px) scaleY(1.03) rotate(-4deg); }
+            80% { transform: translateY(0px) scaleY(1); }
+            83% { transform: translateY(20px) scaleY(0.75) scaleX(1.15) rotate(12deg); } /* BONKED 3 */
+            93% { transform: translateY(0px) scaleY(1) rotate(0deg); }
+        }
+
+        @keyframes impactBurst3 {
+            0%, 15%, 27%, 47%, 59%, 79%, 92%, 100% { opacity: 0; transform: scale(0.3); }
+            19%, 51%, 83% { opacity: 1; transform: scale(1.25); }
+            24%, 56%, 88% { opacity: 0.85; transform: scale(1.0); }
+        }
+
+        .svg-panda-group {
+            animation: pandaBodyLunge3 2.1s ease-in-out forwards;
+        }
+
+        .svg-mallet-arm {
+            transform-origin: 122px 92px;
+            animation: malletSwing3 2.1s ease-in-out forwards;
+        }
+
+        .svg-student-head {
+            transform-origin: 235px 145px;
+            animation: studentHeadSquash3 2.1s ease-in-out forwards;
+        }
+
+        .svg-bonk-stars {
+            transform-origin: 235px 52px;
+            animation: impactBurst3 2.1s ease-in-out forwards;
+        }
+
+        .try-again-msg {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #f87171;
+            margin-bottom: 6px;
+        }
+
+        /* FALLING CHOCOLATES & STARS */
+        .falling-item {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            z-index: 998;
+            pointer-events: none;
+            animation: fallDown 2.2s linear forwards;
+        }
+
+        @keyframes fallDown {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* SCORE SCREEN */
+        #score-view { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header>
+        <div class="nav-left">
+            <button class="home-icon-btn" onclick="goToDashboard()" title="Home">🏠</button>
+            <div class="teacher-info">
+                <div class="teacher-name" id="ui-teacher-name">DHANASEKARAN — Computer Teacher</div>
+                <div class="sub-title-nav" id="ui-sub-title">12th Computer Science • 160 Book Back 1-Marks</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="choco-badge">🍫 <span id="choco-count">0</span></div>
+            <button class="lang-switch-btn" id="lang-btn" onclick="toggleLanguage()">தமிழ்</button>
+            <button class="icon-circle-btn" onclick="speakQuestionOnly()" title="Read Question">🔊</button>
+            <button class="icon-circle-btn" id="theme-toggle-btn" onclick="toggleBrightness()" title="Change Brightness">🍌</button>
+        </div>
+    </header>
+
+    <!-- UPGRADED PANDA HEAD-BONK 3-HITS MODAL -->
+    <div id="panda-modal">
+        <div class="panda-box">
+            <svg class="bonk-svg-stage" viewBox="0 0 320 175" xmlns="http://www.w3.org/2000/svg">
+                <!-- Floor shadow -->
+                <ellipse cx="165" cy="164" rx="125" ry="8" fill="rgba(0,0,0,0.35)"/>
+
+                <!-- PANDA CHARACTER ON LEFT -->
+                <g class="svg-panda-group">
+                    <!-- Panda Legs -->
+                    <rect x="75" y="132" width="18" height="28" rx="9" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                    <rect x="108" y="132" width="18" height="28" rx="9" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                    <!-- Panda Torso -->
+                    <ellipse cx="100" cy="112" rx="34" ry="32" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+                    <path d="M 68 100 Q 100 112 132 100" fill="none" stroke="#0f172a" stroke-width="10"/>
+                    <!-- Panda Ears -->
+                    <circle cx="74" cy="44" r="12" fill="#0f172a"/>
+                    <circle cx="126" cy="44" r="12" fill="#0f172a"/>
+                    <!-- Panda Head -->
+                    <circle cx="100" cy="68" r="30" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+                    <!-- Angry Eyebrows & Eye Patches -->
+                    <ellipse cx="89" cy="68" rx="8" ry="10" transform="rotate(-15 89 68)" fill="#0f172a"/>
+                    <ellipse cx="113" cy="68" rx="8" ry="10" transform="rotate(15 113 68)" fill="#0f172a"/>
+                    <circle cx="90" cy="67" r="3" fill="#ffffff"/>
+                    <circle cx="112" cy="67" r="3" fill="#ffffff"/>
+                    <line x1="82" y1="56" x2="96" y2="62" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="118" y1="56" x2="104" y2="62" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>
+                    <!-- Nose & Mouth -->
+                    <ellipse cx="102" cy="77" rx="5" ry="3.5" fill="#0f172a"/>
+                    <path d="M 95 85 Q 102 80 109 85" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+
+                    <!-- PANDA ARM + GIANT WOODEN MALLET (Swings directly onto student head at x=235, y=68) -->
+                    <g class="svg-mallet-arm">
+                        <!-- Panda Arm -->
+                        <rect x="115" y="84" width="38" height="14" rx="7" fill="#0f172a"/>
+                        <!-- Wooden Mallet Handle -->
+                        <rect x="144" y="34" width="8" height="62" rx="4" transform="rotate(25 148 65)" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+                        <!-- Giant Mallet Head -->
+                        <rect x="136" y="14" width="46" height="26" rx="6" transform="rotate(25 159 27)" fill="#f59e0b" stroke="#78350f" stroke-width="2.5"/>
+                        <line x1="145" y1="18" x2="173" y2="31" stroke="#fef3c7" stroke-width="2" opacity="0.7"/>
+                    </g>
+                </g>
+
+                <!-- STUDENT CHARACTER ON RIGHT (Gets bonked on top of head!) -->
+                <g class="svg-student-head">
+                    <!-- Body / Shirt -->
+                    <path d="M 205 160 L 212 118 Q 235 112 258 118 L 265 160 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2.5"/>
+                    <!-- Neck -->
+                    <rect x="228" y="102" width="14" height="16" fill="#fed7aa"/>
+                    <!-- Head -->
+                    <circle cx="235" cy="80" r="28" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+                    <!-- Hair -->
+                    <path d="M 207 76 Q 212 46 238 48 Q 262 50 263 76 Q 250 62 235 64 Q 218 62 207 76 Z" fill="#1e293b"/>
+                    <!-- Dizzy X Eyes -->
+                    <text x="219" y="83" font-size="13" font-weight="900" fill="#dc2626">✖</text>
+                    <text x="240" y="83" font-size="13" font-weight="900" fill="#dc2626">✖</text>
+                    <!-- Wavy Ouch Mouth -->
+                    <ellipse cx="235" cy="96" rx="7" ry="5" fill="#991b1b"/>
+                    <!-- Bump on head -->
+                    <path d="M 227 50 Q 235 36 243 50" fill="#fca5a5" stroke="#ef4444" stroke-width="2"/>
+                </g>
+
+                <!-- IMPACT STARS & BONK FLASH ON HEAD -->
+                <g class="svg-bonk-stars">
+                    <text x="200" y="42" font-size="22">💥</text>
+                    <text x="246" y="38" font-size="20">💫</text>
+                    <text x="222" y="25" font-size="18">⭐</text>
+                    <text x="188" y="65" font-size="14" font-weight="900" fill="#facc15">BONK!</text>
+                </g>
+            </svg>
+
+            <div class="try-again-msg" id="modal-title-text">மீண்டும் முயற்சி செய்!</div>
+            <p style="font-size: 0.92rem; color: #cbd5e1;" id="modal-sub-text">தவறான விடை! பாண்டா தலையில் 3 முறை அடிக்கிறது!</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- VIEW 1: DASHBOARD -->
+        <div id="dashboard-view">
+            <div class="hero-banner">
+                <div class="badge-pill" id="banner-badge">🎯 Tamil Nadu State Board • 160 Book-Back 1-Marks</div>
+                <h1 id="banner-title">Play Computer Science Quiz & Win Chocolates!</h1>
+                <p id="banner-desc">Fill in your details below to unlock lessons and start playing.</p>
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <span id="progress-txt">Practice Progress (0/160 Solved)</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INLINE WARNING TOAST (NO alert()) -->
+            <div class="inline-toast" id="dashboard-toast">⚠️ Please enter Student Name and School Name first!</div>
+
+            <!-- STUDENT DETAILS CARD -->
+            <div class="card-box">
+                <div class="card-header-row">
+                    <h2 id="student-details-title">🎓 Student Details</h2>
+                    <span class="saved-tag" id="saved-status-tag">✓ Auto Saved</span>
+                </div>
+                <div class="student-grid-form">
+                    <div class="input-group">
+                        <label id="lbl-name">Student Name *</label>
+                        <input type="text" id="st-name" placeholder="Enter name" oninput="autoSaveStudent()">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-school">School Name *</label>
+                        <input type="text" id="st-school" placeholder="Enter school" oninput="autoSaveStudent()">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-class">Class</label>
+                        <input type="text" id="st-class" value="12" oninput="autoSaveStudent()">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl-sec">Section</label>
+                        <input type="text" id="st-sec" placeholder="A / B" oninput="autoSaveStudent()">
+                    </div>
+                </div>
+                <button class="proceed-btn" id="proceed-lessons-btn" onclick="goToLessonsView()">Proceed to Lessons ➔</button>
+            </div>
+
+            <!-- GAME MODES -->
+            <div class="section-title">
+                <span id="modes-title">🎮 Select Game Mode</span>
+            </div>
+
+            <div class="mode-card" onclick="startAllQuestionsMode()">
+                <div class="mode-icon" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">📘</div>
+                <h3 id="mode-all-title">All 160 Book-Back Questions (Practice)</h3>
+                <p id="mode-all-desc">Complete TNSCERT Class 12 CS Book-Back questions with Hints & Voice Reader</p>
+            </div>
+
+            <div class="mode-card" onclick="startRandomChallenge(10)">
+                <div class="mode-icon" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">⚡</div>
+                <h3 id="mode-quick-title">Quick Challenge (10 Questions)</h3>
+                <p id="mode-quick-desc">Random 10 Book-Back questions + Instant Chocolate Rewards</p>
+            </div>
+
+            <div class="mode-card" onclick="startRandomChallenge(20)">
+                <div class="mode-icon" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">🏆</div>
+                <h3 id="mode-mega-title">Mega Challenge (20 Questions)</h3>
+                <p id="mode-mega-desc">Random 20 Book-Back questions + Star & Chocolate Shower</p>
+            </div>
+        </div>
+
+        <!-- VIEW 2: LESSONS SELECTION VIEW -->
+        <div id="lessons-selection-view">
+            <div class="card-header-row" style="margin-bottom: 12px;">
+                <h2 id="lessons-heading-txt">📚 Select a Lesson</h2>
+                <button class="ctrl-btn" style="flex:0; padding: 6px 12px; font-size: 0.8rem;" onclick="goToDashboard()">⬅ Back</button>
+            </div>
+            <div class="lessons-grid" id="lessons-grid-container"></div>
+        </div>
+
+        <!-- VIEW 3: QUIZ PLAY SCREEN -->
+        <div id="quiz-view">
+            <!-- TOP SUB-NAVIGATION PILL BAR (Matches Screenshot 2) -->
+            <div class="quiz-sub-navbar">
+                <div class="sub-nav-left">
+                    <button class="pill-home-btn" onclick="goToDashboard()" id="sub-home-btn">🏠 Home</button>
+                    <div>
+                        <span class="student-meta-text" id="quiz-student-meta">Student (12)</span>
+                        <span class="student-meta-school" id="quiz-school-meta"> • School</span>
+                    </div>
+                </div>
+                <div class="sub-nav-right">
+                    <span class="q-counter-pill" id="quiz-q-counter">1 / 10</span>
+                    <span class="score-pill" id="quiz-score-live">Score: 0</span>
+                    <button class="scorecard-pill-btn" onclick="showFinalScore()" id="quiz-scorecard-btn">📊 Scorecard</button>
+                </div>
+            </div>
+
+            <!-- QUESTION NUMBER JUMP CIRCLES (1, 2, 3...) -->
+            <div class="q-number-strip" id="q-number-strip"></div>
+
+            <!-- QUESTION CARD -->
+            <div class="q-box">
+                <div class="q-unit-meta-row">
+                    <span class="unit-tag-pill" id="quiz-unit-title">⚡ Unit 1: Function</span>
+                    <button class="speaker-btn" onclick="speakQuestionOnly()" id="read-aloud-btn" title="Read Question">🔊 Read Aloud</button>
+                </div>
+
+                <div class="q-top-row">
+                    <div class="q-text" id="q-display-text">Loading question...</div>
+                </div>
+
+                <!-- HINTS BUTTON & BOX BETWEEN QUESTION AND OPTIONS -->
+                <div class="hint-bar-row">
+                    <button class="hint-toggle-btn" onclick="toggleHintBox()" id="hint-toggle-btn">💡 Hint / குறிப்பு</button>
+                    <div class="hint-content-box" id="hint-content-box">
+                        <span class="hint-label-tag" id="hint-box-label">📘 TNSCERT Textbook Hint:</span>
+                        <span id="hint-box-text">Hint text goes here...</span>
+                    </div>
+                </div>
+
+                <!-- OPTIONS -->
+                <div class="options-stack" id="options-container"></div>
+            </div>
+
+            <div class="nav-controls">
+                <button class="ctrl-btn" id="prev-btn" onclick="prevQuestion()">⬅ Previous</button>
+                <button class="ctrl-btn primary" id="next-btn" onclick="nextQuestion()">Next ➡</button>
+            </div>
+        </div>
+
+        <!-- VIEW 4: FINAL SCORE SCREEN -->
+        <div id="score-view">
+            <div class="card-box" style="text-align: center; padding: 30px 20px;">
+                <h2 style="font-size: 1.4rem; margin-bottom: 10px;" id="final-title">Quiz Completed!</h2>
+                <div style="font-size: 2.8rem; margin: 12px 0;" id="final-stars">⭐⭐⭐⭐⭐</div>
+                <div style="font-size: 2.2rem; font-weight: 800; color: #6366f1; margin-bottom: 8px;" id="final-score-text">10 / 10</div>
+                <p style="color: var(--text-muted); margin-bottom: 20px;" id="final-student-info"></p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="ctrl-btn" style="flex: 1; padding: 14px;" onclick="resumeQuizFromScore()" id="resume-quiz-btn">⬅ Back to Quiz</button>
+                    <button class="ctrl-btn primary" style="flex: 1; padding: 14px;" onclick="goToDashboard()" id="score-home-btn">🏠 Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // TNSCERT Class 12 Computer Science - All 16 Lessons (160 Book-Back Questions + Authentic TNSCERT Hints in English & Tamil)
+        const csUnits = [
+            {
+                unit: 1,
+                name_en: "Function",
+                name_ta: "செயற்கூறு",
+                questions: [
+                    {
+                        q_en: "The small sections of code that are used to perform a particular task is called",
+                        q_ta: "ஒரு குறிப்பிட்ட செயலைச் செய்வதற்காக பயன்படுத்தப்படும் குறிமுறைகளின் சிறிய பகுதியே",
+                        options_en: ["(A) Subroutines", "(B) Files", "(C) Pseudo code", "(D) Modules"],
+                        options_ta: ["(அ) துணை நிரல்கள்", "(ஆ) கோப்புகள்", "(இ) Pseudo code", "(ஈ) தொகுதிகள்"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.1): Subroutines are the basic building blocks of computer programs used repeatedly to perform a specific task.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.1): கணினி நிரல்களின் அடிப்படை கட்டுமான தொகுதிகளாகவும், ஒரு குறிப்பிட்ட செயலைச் செய்யவும் பயன்படுவது துணை நிரல்கள் (Subroutines).",
+                        ans: 0
+                    },
+                    {
+                        q_en: "Which of the following is a unit of code that is often defined within a greater code structure?",
+                        q_ta: "பின்வரும் எந்த அலகு ஒரு பெரிய குறிமுறை கட்டமைப்பில் வரையறுக்கப்பட்டுள்ளது?",
+                        options_en: ["(A) Subroutines", "(B) Function", "(C) Files", "(D) Modules"],
+                        options_ta: ["(அ) துணை நிரல்கள்", "(ஆ) செயற்கூறு", "(இ) கோப்புகள்", "(ஈ) தொகுதிகள்"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.1): A function contains a set of code that works on many kinds of inputs and produces a concrete output.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.1): பல வகையான உள்ளீடுகளின் மீது செயல்பட்டு நிலையான வெளியீட்டைத் தரும் பெரிய குறிமுறை கட்டமைப்பின் அலகு 'செயற்கூறு' (Function).",
+                        ans: 1
+                    },
+                    {
+                        q_en: "Which of the following is a distinct syntactic block?",
+                        q_ta: "பின்வரும் எது தனித்தன்மையான தொடரியல் தொகுதிகளைக் கொண்டதாகும்?",
+                        options_en: ["(A) Subroutines", "(B) Function", "(C) Definition", "(D) Modules"],
+                        options_ta: ["(அ) துணை நிரல்கள்", "(ஆ) செயற்கூறு", "(இ) வரையறை", "(ஈ) தொகுதிகள்"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.2): Definitions are not expressions; rather, they are distinct syntactic blocks that bind names to values.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.2): வரையறைகள் (Definitions) கோவைகள் அல்ல; அவை தனித்தன்மையான தொடரியல் தொகுதிகளைக் கொண்டவை.",
+                        ans: 2
+                    },
+                    {
+                        q_en: "The variables in a function definition are called as",
+                        q_ta: "செயற்கூறு வரையறையில் உள்ள மாறிகள் எவ்வாறு அழைக்கப்படுகிறது?",
+                        options_en: ["(A) Subroutines", "(B) Function", "(C) Definition", "(D) Parameters"],
+                        options_ta: ["(அ) துணை நிரல்கள்", "(ஆ) செயற்கூறு", "(இ) வரையறை", "(ஈ) அளபுருக்கள்"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.2.1): Parameters are the variables listed inside the parentheses in a function definition.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.2.1): செயற்கூறு வரையறையில் உள்ள மாறிகள் 'அளபுருக்கள்' (Parameters) எனப்படும்.",
+                        ans: 3
+                    },
+                    {
+                        q_en: "The values which are passed to a function definition are called",
+                        q_ta: "செயற்கூறு வரையறைக்கு அனுப்பப்படும் மதிப்புகள் எவ்வாறு அழைக்கப்படுகிறது?",
+                        options_en: ["(A) Arguments", "(B) Subroutines", "(C) Function", "(D) Definition"],
+                        options_ta: ["(அ) செயலுருபுகள்", "(ஆ) துணை நிரல்கள்", "(இ) செயற்கூறு", "(ஈ) வரையறை"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.2.1): Arguments are the actual values passed to the parameters when calling a function.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.2.1): செயற்கூறு வரையறைக்கு அனுப்பப்படும் உண்மையான மதிப்புகள் 'செயலுருபுகள்' (Arguments) ஆகும்.",
+                        ans: 0
+                    },
+                    {
+                        q_en: "Which of the following are mandatory to write the type annotations in the function definition?",
+                        q_ta: "தரவு வகை குறிப்பு எழுதும்போது, எது கட்டாயமாகிறது?",
+                        options_en: ["(A) { }", "(B) ( )", "(C) [ ]", "(D) < >"],
+                        options_ta: ["(அ) { }", "(ஆ) ( )", "(இ) [ ]", "(ஈ) < >"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.2.2): Parentheses ( ) are mandatory when specifying parameter and return type annotations (e.g., let rec pow (a: int) (b: int) : int).",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.2.2): தரவு வகை குறிப்புகளை (Type annotations) எழுதும்போது அடைப்புக்குறிகள் ( ) கட்டாயமாகும்.",
+                        ans: 1
+                    },
+                    {
+                        q_en: "Which of the following defines what an object can do?",
+                        q_ta: "பின்வரும் எது ஒரு பொருள் செய்ய வேண்டியதை தீர்மானிக்கிறது?",
+                        options_en: ["(A) Operating System", "(B) Compiler", "(C) Interface", "(D) Interpreter"],
+                        options_ta: ["(அ) இயக்க அமைப்பு", "(ஆ) நிரல் பெயர்ப்பி", "(இ) இடைமுகம்", "(ஈ) தொகுப்பான்"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.4): An Interface just defines what an object can do, but won't actually do it.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.4): இடைமுகம் (Interface) ஒரு பொருள் செய்ய வேண்டிய செயல்களை வரையறுக்கிறது; ஆனால் அதனை நேரடியாகச் செய்யாது.",
+                        ans: 2
+                    },
+                    {
+                        q_en: "Which of the following carries out the instructions defined in the interface?",
+                        q_ta: "பின்வரும் எது இடைமுகத்தில் வரையறுக்கப்பட்ட கட்டளைகளை நிறைவேற்றுகிறது?",
+                        options_en: ["(A) Operating System", "(B) Compiler", "(C) Implementation", "(D) Interpreter"],
+                        options_ta: ["(அ) இயக்க அமைப்பு", "(ஆ) நிரல் பெயர்ப்பி", "(இ) செயல்படுத்துதல்", "(ஈ) தொகுப்பான்"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.4): Implementation carries out the instructions defined in the interface.",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.4): இடைமுகத்தில் வரையறுக்கப்பட்ட கட்டளைகளை 'செயல்படுத்துதல்' (Implementation) நிறைவேற்றுகிறது.",
+                        ans: 2
+                    },
+                    {
+                        q_en: "The functions which will give exact result when same arguments are passed are called",
+                        q_ta: "ஒரே மாதிரியான அதே அளபுருக்களை செயற்கூறுவிற்கு அனுப்பினால் சரியான விடையைத் தரும் செயற்கூறு எவ்வாறு அழைக்கப்படும்?",
+                        options_en: ["(A) Impure functions", "(B) Partial Functions", "(C) Dynamic Functions", "(D) Pure functions"],
+                        options_ta: ["(அ) Impure செயற்கூறு", "(ஆ) Partial செயற்கூறு", "(இ) Dynamic செயற்கூறு", "(ஈ) Pure செயற்கூறு"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.5): Pure functions always return the exact same result for the same arguments without any side effects (e.g., sin(0)).",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.5): எந்த பக்க விளைவும் இன்றி ஒரே உள்ளீட்டிற்கு எப்போதும் ஒரே வெளியீட்டைத் தருவது Pure செயற்கூறு.",
+                        ans: 3
+                    },
+                    {
+                        q_en: "The functions which cause side effects to the arguments passed are called",
+                        q_ta: "அளபுருக்களை அனுப்பும் போது பக்க விளைவுகளை ஏற்படுத்தும் செயற்கூறு எவ்வாறு அழைக்கப்படும்?",
+                        options_en: ["(A) Impure functions", "(B) Partial Functions", "(C) Dynamic Functions", "(D) Pure functions"],
+                        options_ta: ["(அ) Impure செயற்கூறு", "(ஆ) Partial செயற்கூறு", "(இ) Dynamic செயற்கூறு", "(ஈ) Pure செயற்கூறு"],
+                        hint_en: "TNSCERT Ch.1 (Sec 1.5.1): Impure functions modify external variables or give different outputs for the same input (e.g., random()).",
+                        hint_ta: "பாடம் 1 (பிரிவு 1.5.1): வெளிப்புற மாறிகளை மாற்றி பக்க விளைவுகளை ஏற்படுத்தும் செயற்கூறு Impure செயற்கூறு ஆகும்.",
+                        ans: 0
+                    }
+                ]
+            },
+            {
+                unit: 2,
+                name_en: "Data Abstraction",
+                name_ta: "தரவு அருவமாக்கம்",
+                questions: [
+                    { q_en: "Which of the following functions that build the abstract data type?", q_ta: "பின்வரும் எந்த செயற்கூறு அருவமாக்கம் தரவு வகையை உருவமைக்கப் பயன்படுகிறது?", options_en: ["(A) Constructors", "(B) Destructors", "(C) Recursive", "(D) Nested"], options_ta: ["(அ) ஆக்கிகள் (Constructors)", "(ஆ) அழிப்பிகள் (Destructors)", "(இ) recursive", "(ஈ) Nested"], hint_en: "TNSCERT Ch.2 (Sec 2.2): Constructors are functions that build the abstract data type.", hint_ta: "பாடம் 2 (பிரிவு 2.2): அருவமாக்கத் தரவு வகையை (ADT) கட்டமைக்க அல்லது உருவாக்க பயன்படுவது ஆக்கிகள் (Constructors).", ans: 0 },
+                    { q_en: "Which of the following functions that retrieve information from the data type?", q_ta: "பின்வரும் எந்த செயற்கூறு தரவு வகையில் இருந்து தகவல்களை மீட்டெடுக்கும்?", options_en: ["(A) Constructors", "(B) Selectors", "(C) Recursive", "(D) Nested"], options_ta: ["(அ) ஆக்கிகள்", "(ஆ) செலக்டர்கள் (Selectors)", "(இ) recursive", "(ஈ) Nested"], hint_en: "TNSCERT Ch.2 (Sec 2.2): Selectors are functions that extract/retrieve individual pieces of information from the object.", hint_ta: "பாடம் 2 (பிரிவு 2.2): தரவு வகையிலிருந்து தகவல்களை பிரித்தெடுக்க அல்லது மீட்டெடுக்க பயன்படுவது செலக்டர்கள் (Selectors).", ans: 1 },
+                    { q_en: "The data structure which is a mutable ordered sequence of elements is called", q_ta: "வரிசைப்படுத்தப்பட்ட உறுப்புகளை மாற்றக்கூடிய தரவு கட்டமைப்பு", options_en: ["(A) Built in", "(B) List", "(C) Tuple", "(D) Derived data"], options_ta: ["(அ) Built in", "(ஆ) List", "(இ) Tuple", "(ஈ) Derived data"], hint_en: "TNSCERT Ch.2 (Sec 2.4.1): List allows elements to be modified/changed (mutable) and is enclosed in [ ].", hint_ta: "பாடம் 2 (பிரிவு 2.4.1): சதுர அடைப்புக்குறிக்குள் [ ] அமைந்து உறுப்புகளை மாற்றக்கூடியது List.", ans: 1 },
+                    { q_en: "A sequence of immutable objects is called", q_ta: "மாற்றம் செய்ய முடியாத பொருளின் தொடர் வரிசை", options_en: ["(A) Built in", "(B) List", "(C) Tuple", "(D) Derived data"], options_ta: ["(அ) Built in", "(ஆ) List", "(இ) Tuple", "(ஈ) Derived data"], hint_en: "TNSCERT Ch.2 (Sec 2.4.2): Tuple is a comma-separated sequence of values enclosed in ( ) whose elements cannot be changed (immutable).", hint_ta: "பாடம் 2 (பிரிவு 2.4.2): வளைந்த அடைப்புக்குறிக்குள் ( ) அமைந்து மாற்ற முடியாத தொடர் வரிசை Tuple.", ans: 2 },
+                    { q_en: "The data type whose representation is known are called", q_ta: "உருவமைப்பு அறியப்பட்ட தரவு வகை எவ்வாறு அழைக்கப்படுகிறது?", options_en: ["(A) Built in datatype", "(B) Derived datatype", "(C) Concrete datatype", "(D) Abstract datatype"], options_ta: ["(அ) Built in datatype", "(ஆ) Derived datatype", "(இ) Concrete datatype", "(ஈ) Abstract datatype"], hint_en: "TNSCERT Ch.2 (Sec 2.3): Concrete Data Types (CDT) are data types whose internal representation is known.", hint_ta: "பாடம் 2 (பிரிவு 2.3): தரவு உருவமைப்பு வெளிப்படையாக அறியப்பட்ட தரவு வகை Concrete datatype (CDT).", ans: 2 },
+                    { q_en: "The data type whose representation is unknown are called", q_ta: "உருவமைப்பு அறியப்படாத தரவு வகை எவ்வாறு அழைக்கப்படுகிறது?", options_en: ["(A) Built in datatype", "(B) Derived datatype", "(C) Concrete datatype", "(D) Abstract datatype"], options_ta: ["(அ) Built in datatype", "(ஆ) Derived datatype", "(இ) Concrete datatype", "(ஈ) Abstract datatype"], hint_en: "TNSCERT Ch.2 (Sec 2.3): Abstract Data Types (ADT) hide implementation details, so their representation is unknown.", hint_ta: "பாடம் 2 (பிரிவு 2.3): செயல்படுத்தும் விவரங்கள் மறைக்கப்பட்டு உருவமைப்பு அறியப்படாதது Abstract datatype (ADT).", ans: 3 },
+                    { q_en: "Which of the following is a compound structure?", q_ta: "பின்வருவனவற்றில் எது கலவை அமைப்பு?", options_en: ["(A) Pair", "(B) Triplet", "(C) Single", "(D) Quadrat"], options_ta: ["(அ) Pair", "(ஆ) Triplet", "(இ) Single", "(ஈ) Quadrat"], hint_en: "TNSCERT Ch.2 (Sec 2.4): Bundling two values together into one compound structure is called a Pair.", hint_ta: "பாடம் 2 (பிரிவு 2.4): இரண்டு மதிப்புகளை ஒன்றாக இணைக்கும் கலவை அமைப்பு Pair எனப்படும்.", ans: 0 },
+                    { q_en: "Bundling two values together into one can be considered as", q_ta: "இரு மதிப்புகளை ஒன்றாக பிணைப்பது எந்த வகையாக கருதப்படுகிறது?", options_en: ["(A) Pair", "(B) Triplet", "(C) Single", "(D) Quadrat"], options_ta: ["(அ) Pair", "(ஆ) Triplet", "(இ) Single", "(ஈ) Quadrat"], hint_en: "TNSCERT Ch.2 (Sec 2.4): Pair is a compound data structure created by bundling two values (like a List or Tuple of 2 items).", hint_ta: "பாடம் 2 (பிரிவு 2.4): இரு மதிப்புகளை ஒன்றாகப் பிணைப்பது Pair எனப்படும்.", ans: 0 },
+                    { q_en: "Which of the following allow to name the various parts of a multi-item object?", q_ta: "பின்வருவனவற்றில் எது பல் உறுப்பு பொருளின் பல்வேறு பகுதிகளை பெயரிட அனுமதிக்கிறது?", options_en: ["(A) Tuples", "(B) Lists", "(C) Classes", "(D) Quadrats"], options_ta: ["(அ) Tuples", "(ஆ) Lists", "(இ) Classes", "(ஈ) Quadrats"], hint_en: "TNSCERT Ch.2 (Sec 2.5): In OOP languages, Classes allow naming the various parts/attributes of a multi-item object.", hint_ta: "பாடம் 2 (பிரிவு 2.5): பொருள் நோக்கு நிரலாக்கத்தில் பல் உறுப்பு பொருளின் பகுதிகளுக்குப் பெயரிட Classes பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Which of the following is constructed by placing expressions within square brackets?", q_ta: "பின்வருவனவற்றில் எது கோவைகளை சதுர அடைப்புக்குறிக்குள் வைத்து உருவமைக்கிறது?", options_en: ["(A) Tuples", "(B) Lists", "(C) Classes", "(D) Quadrats"], options_ta: ["(அ) Tuples", "(ஆ) Lists", "(இ) Classes", "(ஈ) Quadrats"], hint_en: "TNSCERT Ch.2 (Sec 2.4.1): Lists are constructed by placing comma-separated expressions within square brackets [ ].", hint_ta: "பாடம் 2 (பிரிவு 2.4.1): கோவைகளை சதுர அடைப்புக்குறிக்குள் [ ] வைத்து உருவாக்கப்படுவது Lists.", ans: 1 }
+                ]
+            },
+            {
+                unit: 3,
+                name_en: "Scoping",
+                name_ta: "வரையெல்லை",
+                questions: [
+                    { q_en: "Which of the following refers to the visibility of variables in one part of a program to another part of the same program?", q_ta: "பின்வருவனவற்றுள் எது நிரலின் ஒரு பகுதியின் அணுகியல்பை மற்றொரு பகுதிக்கு குறிப்பதாகும்?", options_en: ["(A) Scope", "(B) Memory", "(C) Address", "(D) Accessibility"], options_ta: ["(அ) வரையெல்லை (Scope)", "(ஆ) நினைவகம்", "(இ) முகவரி", "(ஈ) அணுகுமுறை"], hint_en: "TNSCERT Ch.3 (Sec 3.1): Scope determines where in a program a variable or function can be accessed.", hint_ta: "பாடம் 3 (பிரிவு 3.1): நிரலின் ஒரு பகுதியில் உள்ள மாறியை மற்றொரு பகுதியில் அணுகும் தன்மையே வரையெல்லை (Scope).", ans: 0 },
+                    { q_en: "The process of binding a variable name with an object is called", q_ta: "மாறியின் பெயரை ஒரு பொருளுடன் பிணைக்கும் செயல்முறையை என்னவென்று அழைக்கப்படும்?", options_en: ["(A) Scope", "(B) Mapping", "(C) Late binding", "(D) Early binding"], options_ta: ["(அ) வரையெல்லை", "(ஆ) மேப்பிங் (Mapping)", "(இ) பின் பிணைத்தல்", "(ஈ) முன் பிணைத்தல்"], hint_en: "TNSCERT Ch.3 (Sec 3.2): Mapping is the process of binding a variable name with an object.", hint_ta: "பாடம் 3 (பிரிவு 3.2): மாறியின் பெயரை ஒரு பொருளுடன் பிணைக்கும் செயல்முறை மேப்பிங் (Mapping).", ans: 1 },
+                    { q_en: "Which of the following is used in programming languages to map the variable and object?", q_ta: "பின்வருவனவற்றுள் எது நிரலாக்க மொழியில் மாறியையும் பொருளையும் மேப் செய்யப் பயன்படுகிறது?", options_en: ["(A) ::", "(B) :=", "(C) =", "(D) =="], options_ta: ["(அ) ::", "(ஆ) :=", "(இ) =", "(ஈ) =="], hint_en: "TNSCERT Ch.3 (Sec 3.2): The assignment operator '=' is used to map a variable name to an object.", hint_ta: "பாடம் 3 (பிரிவு 3.2): மாறியையும் பொருளையும் மேப் செய்ய '=' என்ற மதிப்பிருத்தல் செயற்குறி பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Containers for mapping names of variables to objects is called", q_ta: "எது மாறியின் பெயரை பொருளுடன் மேப்பிங் செய்வதற்கான இடம் ஆகும்?", options_en: ["(A) Scope", "(B) Mapping", "(C) Binding", "(D) Namespaces"], options_ta: ["(அ) வரையெல்லை", "(ஆ) மேப்பிங்", "(இ) பிணைத்தல்", "(ஈ) Namespaces"], hint_en: "TNSCERT Ch.3 (Sec 3.2): Namespaces are containers (like a dictionary) that map variable names to objects.", hint_ta: "பாடம் 3 (பிரிவு 3.2): மாறியின் பெயர்களை பொருளுடன் மேப்பிங் செய்து வைத்திருக்கும் கொள்கலன் Namespaces.", ans: 3 },
+                    { q_en: "Which scope refers to variables defined in current function?", q_ta: "எந்த வரையெல்லை நடப்பு செயற்கூறில் வரையறுக்கப்படும் மாறிகளைக் குறிக்கும்?", options_en: ["(A) Local Scope", "(B) Global scope", "(C) Module scope", "(D) Function Scope"], options_ta: ["(அ) உள்ளமை வரையெல்லை", "(ஆ) முழுதளாவிய வரையெல்லை", "(இ) தொகுதி வரையெல்லை", "(ஈ) செயற்கூறு வரையெல்லை"], hint_en: "TNSCERT Ch.3 (Sec 3.3.1 - LEGB Rule): 'L' stands for Local scope, referring to variables defined inside the current function.", hint_ta: "பாடம் 3 (பிரிவு 3.3.1 - LEGB விதி): நடப்பு செயற்கூறின் உள்ளே வரையறுக்கப்படும் மாறிகள் உள்ளமை வரையெல்லை (Local Scope) ஆகும்.", ans: 0 },
+                    { q_en: "The process of subdividing a computer program into separate sub-programs is called", q_ta: "ஒரு கணிப்பொறி நிரலை பல துணை நிரல்களாக பிரிக்கும் செயல்முறையே என்னவென்று அழைக்கப்படும்?", options_en: ["(A) Procedural Programming", "(B) Modular programming", "(C) Event Driven Programming", "(D) Object oriented Programming"], options_ta: ["(அ) செயல்முறை நிரலாக்கம்", "(ஆ) தொகுதி நிரலாக்கம்", "(இ) நிகழ்வு இயக்க நிரலாக்கம்", "(ஈ) பொருள் நோக்கு நிரலாக்கம்"], hint_en: "TNSCERT Ch.3 (Sec 3.4): Modular programming divides a large program into smaller, manageable modules/sub-programs.", hint_ta: "பாடம் 3 (பிரிவு 3.4): ஒரு பெரிய நிரலை சிறிய துணை நிரல்களாகப் பிரிக்கும் முறை தொகுதி நிரலாக்கம் (Modular programming).", ans: 1 },
+                    { q_en: "Which of the following security technique that regulates who can view or use resources in a computing environment?", q_ta: "எது கணினி சூழலில் உள்ள வளங்களை யார் பார்வையிட மற்றும் பயன்படுத்த முடியும் என்பதை வரைமுறைப்படுத்தும் ஒரு பாதுகாப்பு தொழில்நுட்பமாகும்?", options_en: ["(A) Password", "(B) Authentication", "(C) Access control", "(D) Certification"], options_ta: ["(அ) கடவுச் சொல்", "(ஆ) அங்கீகாரம்", "(இ) அணுகல் கட்டுப்பாடு", "(ஈ) சான்றிதழ்"], hint_en: "TNSCERT Ch.3 (Sec 3.5): Access control regulates who can view or use resources in a computing environment.", hint_ta: "பாடம் 3 (பிரிவு 3.5): கணினி வளங்களை யார் அணுகலாம் என்பதைக் கட்டுப்படுத்தும் பாதுகாப்பு முறை அணுகல் கட்டுப்பாடு (Access control).", ans: 2 },
+                    { q_en: "Which of the following members of a class can be handled only from within the class?", q_ta: "எந்த இனக்குழுவின் உறுப்புகளை இனக்குழுவின் உள்ளே மட்டும்தான் கையாள முடியும்?", options_en: ["(A) Public members", "(B) Protected members", "(C) Secured members", "(D) Private members"], options_ta: ["(அ) public உறுப்புகள்", "(ஆ) protected உறுப்புகள்", "(இ) secured உறுப்புகள்", "(ஈ) private உறுப்புகள்"], hint_en: "TNSCERT Ch.3 (Sec 3.5.1): Private members cannot be accessed from outside the class; they are strictly handled within the class.", hint_ta: "பாடம் 3 (பிரிவு 3.5.1): இனக்குழுவின் உள்ளே மட்டுமே அணுகக்கூடிய உறுப்புகள் private உறுப்புகள்.", ans: 3 },
+                    { q_en: "Which members are accessible from outside the class?", q_ta: "எந்த உறுப்புகளை இனக்குழுவிற்கு வெளியே இருந்தும் அணுக முடியும்?", options_en: ["(A) Public members", "(B) Protected members", "(C) Secured members", "(D) Private members"], options_ta: ["(அ) public உறுப்புகள்", "(ஆ) protected உறுப்புகள்", "(இ) secured உறுப்புகள்", "(ஈ) private உறுப்புகள்"], hint_en: "TNSCERT Ch.3 (Sec 3.5.1): Public members of a class are accessible from anywhere outside the class.", hint_ta: "பாடம் 3 (பிரிவு 3.5.1): இனக்குழுவிற்கு வெளியேயிருந்தும் எங்கு வேண்டுமானாலும் அணுகக்கூடியவை public உறுப்புகள்.", ans: 0 },
+                    { q_en: "The members that are accessible from within the class and are also available to its sub-classes is called", q_ta: "எது வரையறுக்கப்பட்ட இனக்குழு மற்றும் அதன் துணை இனக்குழுக்களால் அணுகப்படும் உறுப்புகள் ஆகும்?", options_en: ["(A) Public members", "(B) Protected members", "(C) Secured members", "(D) Private members"], options_ta: ["(அ) public உறுப்புகள்", "(ஆ) protected உறுப்புகள்", "(இ) secured உறுப்புகள்", "(ஈ) private உறுப்புகள்"], hint_en: "TNSCERT Ch.3 (Sec 3.5.1): Protected members can be accessed within the class and by its derived/sub-classes.", hint_ta: "பாடம் 3 (பிரிவு 3.5.1): இனக்குழு மற்றும் அதன் துணை இனக்குழுக்களால் மட்டும் அணுகக்கூடியவை protected உறுப்புகள்.", ans: 1 }
+                ]
+            },
+            {
+                unit: 4,
+                name_en: "Algorithmic Strategies",
+                name_ta: "நெறிமுறையின் யுக்திகள்",
+                questions: [
+                    { q_en: "The word comes from the name of a Persian mathematician Abu Ja’far Mohammed ibn-i Musa al Khowarizmi is called?", q_ta: "எந்த சொல் பெர்ஷிய கணிதமேதை அபு ஜாஃபர் முகமது இபின்-ஐமுசா அல் கௌவாரிஸ்மி பெயரில் இருந்து வந்தது?", options_en: ["(A) Flowchart", "(B) Flow", "(C) Algorithm", "(D) Syntax"], options_ta: ["(அ) Flowchart", "(ஆ) Flow", "(இ) Algorithm", "(ஈ) Syntax"], hint_en: "TNSCERT Ch.4 (Sec 4.1): The word 'Algorithm' originated from the Persian author Al-Khowarizmi.", hint_ta: "பாடம் 4 (பிரிவு 4.1): 'Algorithm' என்ற சொல் பெர்ஷிய கணிதமேதை அல்-கௌவாரிஸ்மி பெயரிலிருந்து உருவானது.", ans: 2 },
+                    { q_en: "From the following sorting algorithms which algorithm needs the minimum number of swaps?", q_ta: "பின்வரும் வரிசையாக்க நெறிமுறையில், எந்த நெறிமுறைக்கு குறைந்த எண்ணிக்கையிலான இடமாற்றம் தேவைப்படும்?", options_en: ["(A) Bubble sort", "(B) Quick sort", "(C) Merge sort", "(D) Selection sort"], options_ta: ["(அ) குமிழி", "(ஆ) விரைவு", "(இ) ஒன்றிணைந்த", "(ஈ) தேர்ந்தெடுப்பு"], hint_en: "TNSCERT Ch.4 (Sec 4.5.2): Selection sort finds the smallest element and performs at most one swap per pass, needing the minimum swaps.", hint_ta: "பாடம் 4 (பிரிவு 4.5.2): ஒவ்வொரு சுற்றிலும் மிகச்சிறிய உறுப்பைத் தேர்ந்தெடுத்து ஒரே ஒரு இடமாற்றம் செய்வதால் Selection sort குறைந்த இடமாற்றங்களைக் கொண்டது.", ans: 3 },
+                    { q_en: "Two main measures for the efficiency of an algorithm are", q_ta: "நெறிமுறையின் செயல்திறனை அளவிட இரண்டு முக்கிய அளவீடுகள் எவை?", options_en: ["(A) Processor and memory", "(B) Complexity and capacity", "(C) Time and space", "(D) Data and space"], options_ta: ["(அ) செயலி மற்றும் நினைவகம்", "(ஆ) சிக்கல் மற்றும் கொள்ளளவு", "(இ) நேரம் மற்றும் இடம்", "(ஈ) தரவு மற்றும் இடம்"], hint_en: "TNSCERT Ch.4 (Sec 4.3): Algorithm efficiency is measured using Time complexity and Space complexity.", hint_ta: "பாடம் 4 (பிரிவு 4.3): நெறிமுறையின் செயல்திறனை அளவிடும் இரு முக்கிய காரணிகள் நேரம் (Time) மற்றும் இடச் சிக்கல் (Space).", ans: 2 },
+                    { q_en: "The algorithm that yields expected output for a valid input is called as", q_ta: "செல்லுபடியாகும் உள்ளீட்டுக்கு எதிர்பார்க்கப்படும் வெளியீட்டை தரும் நெறிமுறை இவ்வாறு அழைக்கப்படுகிறது.", options_en: ["(A) Algorithmic solution", "(B) Algorithmic outcomes", "(C) Algorithmic problem", "(D) Algorithmic coding"], options_ta: ["(அ) நெறிமுறைசார் தீர்வு", "(ஆ) நெறிமுறைசார் வெளியீடு", "(இ) நெறிமுறைசார் சிக்கல்", "(ஈ) நெறிமுறைசார் குறிமுறை"], hint_en: "TNSCERT Ch.4 (Sec 4.2): An algorithm that produces the expected output for a valid input is an Algorithmic solution.", hint_ta: "பாடம் 4 (பிரிவு 4.2): சரியான உள்ளீட்டிற்கு எதிர்பார்க்கப்படும் வெளியீட்டைத் தருவது நெறிமுறைசார் தீர்வு (Algorithmic solution).", ans: 0 },
+                    { q_en: "Which of the following is used to describe the worst case of an algorithm?", q_ta: "ஒரு நெறிமுறையில் மிகமோசமான நிலையை குறிக்க பின்வரும் எது பயன்படுகிறது?", options_en: ["(A) Big A", "(B) Big S", "(C) Big W", "(D) Big O"], options_ta: ["(அ) Big A", "(ஆ) Big S", "(இ) Big W", "(ஈ) Big O"], hint_en: "TNSCERT Ch.4 (Sec 4.3.3): Big O describes the upper bound (worst-case complexity) of an algorithm.", hint_ta: "பாடம் 4 (பிரிவு 4.3.3): நெறிமுறையின் மிக மோசமான நிலையை (Worst case) குறிக்க Big O பயன்படுகிறது.", ans: 3 },
+                    { q_en: "Big Ω is the reverse of", q_ta: "Big Ω இதன் எதிர் பதமானது:", options_en: ["(A) Big O", "(B) Big θ", "(C) Big A", "(D) Big S"], options_ta: ["(அ) Big O", "(ஆ) Big θ", "(இ) Big A", "(ஈ) Big S"], hint_en: "TNSCERT Ch.4 (Sec 4.3.3): Big Omega (Ω) represents the lower bound (best case), which is the reverse of Big O (upper bound).", hint_ta: "பாடம் 4 (பிரிவு 4.3.3): சிறந்த நிலையைக் குறிக்கும் Big Ω என்பது மோசமான நிலையைக் குறிக்கும் Big O-வின் எதிர்பதமாகும்.", ans: 0 },
+                    { q_en: "Binary search is also called as", q_ta: "இருமத் தேடல் இவ்வாறும் அழைக்கப்படும்.", options_en: ["(A) Linear search", "(B) Sequential search", "(C) Random search", "(D) Half-interval search"], options_ta: ["(அ) வரிசைமுறைத் தேடல்", "(ஆ) தொடர் தேடல்", "(இ) தொடரற்ற தேடல்", "(ஈ) இடைவெளித் தேடல்"], hint_en: "TNSCERT Ch.4 (Sec 4.4.2): Binary search repeatedly divides the sorted search interval in half, hence called Half-interval search.", hint_ta: "பாடம் 4 (பிரிவு 4.4.2): பட்டியலை பாதியாகப் பிரித்துத் தேடுவதால் இருமத் தேடல் 'பாதி இடைவெளித் தேடல்' (Half-interval search) எனப்படும்.", ans: 3 },
+                    { q_en: "The Θ notation in asymptotic evaluation represents", q_ta: "Θ என்ற குறியீடு asymptotic மதிப்பீட்டில் எதைக் குறிக்கிறது?", options_en: ["(A) Base case", "(B) Average case", "(C) Worst case", "(D) NULL case"], options_ta: ["(அ) அடிப்படை நிலை", "(ஆ) மிதமான நிலை", "(இ) மோசமான நிலை", "(ஈ) NULL நிலை"], hint_en: "TNSCERT Ch.4 (Sec 4.3.3): Big Theta (Θ) represents the tight bound (average case) where lower and upper bounds are the same.", hint_ta: "பாடம் 4 (பிரிவு 4.3.3): Θ (Theta) குறியீடு சராசரி / மிதமான நிலையை (Average case) குறிக்கிறது.", ans: 1 },
+                    { q_en: "If a problem can be broken into subproblems which are reused several times, the problem possesses which property?", q_ta: "ஒரு சிக்கல் துணைச் சிக்கல்களாக பிரித்து அதனை பல முறை பயன்படுத்தினால், அந்த சிக்கல் எந்த பண்பை பெறும்?", options_en: ["(A) Overlapping subproblems", "(B) Optimal substructure", "(C) Memoization", "(D) Greedy"], options_ta: ["(அ) ஒன்றோடு ஒன்றிணைந்த துணைச்சிக்கல்", "(ஆ) உகந்த துணை கட்டமைப்பு", "(இ) நினைவிருத்தல்", "(ஈ) பொறாமை"], hint_en: "TNSCERT Ch.4 (Sec 4.6): When subproblems are solved repeatedly and reused, the problem has Overlapping subproblems.", hint_ta: "பாடம் 4 (பிரிவு 4.6): துணைச் சிக்கல்கள் மீண்டும் மீண்டும் பயன்படுத்தப்பட்டால் அது ஒன்றோடு ஒன்றிணைந்த துணைச்சிக்கல் (Overlapping subproblems) பண்பைப் பெறும்.", ans: 0 },
+                    { q_en: "In dynamic programming, the technique of storing the previously calculated values is called?", q_ta: "இயங்கு நிரலாக்கத்தில், ஏற்கனவே கணக்கீடு செய்த மதிப்புகளை சேமிக்கும் யுக்தியை இவ்வாறு அழைக்கலாம்.", options_en: ["(A) Saving value property", "(B) Storing value property", "(C) Memoization", "(D) Mapping"], options_ta: ["(அ) மதிப்பை சேமிக்கும் பண்பு", "(ஆ) மதிப்பை சேகரிக்கும் பண்பு", "(இ) நினைவிருத்தல்", "(ஈ) படமிடல்"], hint_en: "TNSCERT Ch.4 (Sec 4.6): Memoization stores the results of expensive function calls and returns the cached result when the same inputs occur again.", hint_ta: "பாடம் 4 (பிரிவு 4.6): ஏற்கனவே கணக்கிட்ட மதிப்புகளை நினைவகத்தில் சேமித்து மீண்டும் பயன்படுத்தும் நுட்பம் நினைவிருத்தல் (Memoization).", ans: 2 }
+                ]
+            },
+            {
+                unit: 5,
+                name_en: "Python - Variables and Operators",
+                name_ta: "பைத்தான் அறிமுகம் - மாறிகள் மற்றும் செயற்குறிகள்",
+                questions: [
+                    { q_en: "Who developed Python?", q_ta: "பைத்தானை உருவாக்கியவர் யார்?", options_en: ["(A) Ritche", "(B) Guido Van Rossum", "(C) Bill Gates", "(D) Sunder Pitchai"], options_ta: ["(அ) ரிட்ஸீ", "(ஆ) கைடோ வான் ரோஷம்", "(இ) பில் கேட்ஸ்", "(ஈ) சுந்தர் பிச்சை"], hint_en: "TNSCERT Ch.5 (Sec 5.1): Python was created by Guido Van Rossum in 1991 at CWI in the Netherlands.", hint_ta: "பாடம் 5 (பிரிவு 5.1): 1991-ஆம் ஆண்டு நெதர்லாந்தில் கைடோ வான் ரோஷம் என்பவரால் பைத்தான் உருவாக்கப்பட்டது.", ans: 1 },
+                    { q_en: "The Python prompt indicates that Interpreter is ready to accept instruction.", q_ta: "இவற்றுள் எந்த தூண்டு குறி நிரல் பெயர்ப்பி கட்டளைகளை ஏற்று கொள்ள தயார் நிலையில் இருப்பதை குறிக்கிறது?", options_en: ["(A) >>>", "(B) <<<", "(C) #", "(D) <<"], options_ta: ["(அ) >>>", "(ஆ) <<<", "(இ) #", "(ஈ) <<"], hint_en: "TNSCERT Ch.5 (Sec 5.2.1): Three greater-than signs (>>>) is the standard Python interactive prompt.", hint_ta: "பாடம் 5 (பிரிவு 5.2.1): பைத்தான் நிரல் பெயர்ப்பி கட்டளைகளை ஏற்க தயாராக இருப்பதை '>>>' என்ற தூண்டு குறி காட்டுகிறது.", ans: 0 },
+                    { q_en: "Which of the following shortcut is used to create new Python Program?", q_ta: "பின்வரும் எந்த சாவி சேர்மானம் ஓர் புதிய பைத்தான் நிரலை உருவாக்க பயன்படுகிறது?", options_en: ["(A) Ctrl + C", "(B) Ctrl + F", "(C) Ctrl + B", "(D) Ctrl + N"], options_ta: ["(அ) Ctrl+C", "(ஆ) Ctrl+F", "(இ) Ctrl+B", "(ஈ) Ctrl+N"], hint_en: "TNSCERT Ch.5 (Sec 5.2.2): File -> New File or Ctrl + N opens a new script window in Python IDLE.", hint_ta: "பாடம் 5 (பிரிவு 5.2.2): புதிய பைத்தான் கோப்பை உருவாக்க Ctrl + N குறுக்குவழி சாவி பயன்படுகிறது.", ans: 3 },
+                    { q_en: "Which of the following character is used to give comments in Python Program?", q_ta: "பின்வரும் எந்த குறியுரு பைத்தான் நிரலில் குறிப்புகளை உள்ளீடு செய்ய பயன்படுகிறது?", options_en: ["(A) #", "(B) &", "(C) @", "(D) $"], options_ta: ["(அ) #", "(ஆ) &", "(இ) @", "(ஈ) $"], hint_en: "TNSCERT Ch.5 (Sec 5.4): Comments in Python begin with the hash symbol (#) and are ignored by the interpreter.", hint_ta: "பாடம் 5 (பிரிவு 5.4): பைத்தான் நிரலில் குறிப்புகள் (Comments) '#' என்ற குறியுருவுடன் தொடங்கும்.", ans: 0 },
+                    { q_en: "This symbol is used to print more than one item on a single line.", q_ta: "எது குறி ஒன்றுக்கு மேற்பட்ட உறுப்புகளை ஒற்றை வரியில் அச்சிடும்?", options_en: ["(A) Semicolon(;)", "(B) Dollor($)", "(C) Comma(,)", "(D) Colon(:)"], options_ta: ["(அ) அரைப்புள்ளி", "(ஆ) டாலர்", "(இ) காற்புள்ளி", "(ஈ) முக்காற்புள்ளி"], hint_en: "TNSCERT Ch.5 (Sec 5.3.1): Comma (,) is used as a separator in print() to display multiple items on the same line.", hint_ta: "பாடம் 5 (பிரிவு 5.3.1): print() செயற்கூறில் ஒன்றுக்கு மேற்பட்ட மதிப்புகளை ஒரே வரியில் அச்சிட காற்புள்ளி (,) பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Which of the following is not a token?", q_ta: "பின்வரும் எது வில்லைகள் கிடையாது?", options_en: ["(A) Interpreter", "(B) Identifiers", "(C) Keyword", "(D) Operators"], options_ta: ["(அ) நிரல்பெயர்ப்பி", "(ஆ) குறிப்பெயர்கள்", "(இ) சிறப்புச் சொற்கள்", "(ஈ) செயற்குறிகள்"], hint_en: "TNSCERT Ch.5 (Sec 5.6): Python tokens are Identifiers, Keywords, Operators, Delimiters, and Literals. Interpreter is a translator software.", hint_ta: "பாடம் 5 (பிரிவு 5.6): குறிப்பெயர்கள், சிறப்புச் சொற்கள், செயற்குறிகள் ஆகியவை வில்லைகள் (Tokens). நிரல்பெயர்ப்பி (Interpreter) ஒரு மொழிமாற்றி.", ans: 0 },
+                    { q_en: "Which of the following is not a Keyword in Python?", q_ta: "பின்வருவனவற்றில் எது பைத்தான் சிறப்புச் சொல் கிடையாது?", options_en: ["(A) break", "(B) while", "(C) continue", "(D) operators"], options_ta: ["(அ) break", "(ஆ) while", "(இ) continue", "(ஈ) operators"], hint_en: "TNSCERT Ch.5 (Sec 5.6.2): 'break', 'while', and 'continue' are reserved keywords in Python; 'operators' is not a keyword.", hint_ta: "பாடம் 5 (பிரிவு 5.6.2): break, while, continue ஆகியவை பைத்தான் சிறப்புச் சொற்கள்; 'operators' என்பது சிறப்புச் சொல் அல்ல.", ans: 3 },
+                    { q_en: "Which operator is also called as Comparative operator?", q_ta: "எந்த செயற்குறியை ஒப்பீடு செயற்குறி என்று அழைக்கப்படுகிறது?", options_en: ["(A) Arithmetic", "(B) Relational", "(C) Logical", "(D) Assignment"], options_ta: ["(அ) கணக்கீடு", "(ஆ) தொடர்புடைய", "(இ) தருக்க", "(ஈ) மதிப்பிருத்தல்"], hint_en: "TNSCERT Ch.5 (Sec 5.6.3): Relational operators (==, !=, >, <, >=, <=) compare two values and are also called Comparative operators.", hint_ta: "பாடம் 5 (பிரிவு 5.6.3): இரு மதிப்புகளை ஒப்பிடுவதால் தொடர்புடைய செயற்குறி (Relational) ஒப்பீடு செயற்குறி எனப்படும்.", ans: 1 },
+                    { q_en: "Which of the following is not Logical operator?", q_ta: "பின்வருவனவற்றில் எது தருக்க செயற்குறி கிடையாது?", options_en: ["(A) and", "(B) or", "(C) not", "(D) like"], options_ta: ["(அ) and", "(ஆ) or", "(இ) not", "(ஈ) like"], hint_en: "TNSCERT Ch.5 (Sec 5.6.3): Python has only three logical operators: 'and', 'or', and 'not'.", hint_ta: "பாடம் 5 (பிரிவு 5.6.3): பைத்தானில் 'and', 'or', 'not' ஆகிய மூன்றே தருக்க செயற்குறிகள் உள்ளன; 'like' கிடையாது.", ans: 3 },
+                    { q_en: "Which operator is also called as Conditional operator?", q_ta: "எந்த செயற்குறி நிபந்தனை செயற்குறி என்று அழைக்கப்படுகிறது?", options_en: ["(A) Ternary", "(B) Relational", "(C) Logical", "(D) Assignment"], options_ta: ["(அ) மும்ம செயற்குறி", "(ஆ) தொடர்புடைய", "(இ) தருக்க", "(ஈ) மதிப்பிருத்தல்"], hint_en: "TNSCERT Ch.5 (Sec 5.6.3): Ternary operator evaluates a condition in a single line (a if condition else b) and is also called Conditional operator.", hint_ta: "பாடம் 5 (பிரிவு 5.6.3): ஒரு நிபந்தனையின் அடிப்படையில் மதிப்பைத் தேர்ந்தெடுக்கும் மும்ம செயற்குறி (Ternary) நிபந்தனை செயற்குறி எனப்படும்.", ans: 0 }
+                ]
+            },
+            {
+                unit: 6,
+                name_en: "Control Structures",
+                name_ta: "கட்டுப்பாட்டுக் கட்டமைப்புகள்",
+                questions: [
+                    { q_en: "How many important control structures are there in Python?", q_ta: "பைத்தானில் எத்தனை முக்கியமான கட்டுப்பாட்டு கட்டமைப்புகள் உள்ளன?", options_en: ["(A) 3", "(B) 4", "(C) 5", "(D) 6"], options_ta: ["(அ) 3", "(ஆ) 4", "(இ) 5", "(ஈ) 6"], hint_en: "TNSCERT Ch.6 (Sec 6.2): There are 3 important control structures: Sequential, Alternative/Branching, and Iterative/Looping.", hint_ta: "பாடம் 6 (பிரிவு 6.2): வரிசைமுறை, கிளைப்பிரிப்பு, மடக்கு என 3 முக்கிய கட்டுப்பாட்டு கட்டமைப்புகள் உள்ளன.", ans: 0 },
+                    { q_en: "elif can be considered to be abbreviation of", q_ta: "elif என்பதன் விரிவாக்கம்", options_en: ["(A) nested if", "(B) if..else", "(C) else if", "(D) if..elif"], options_ta: ["(அ) nested if", "(ஆ) if..else", "(இ) else if", "(ஈ) if..elif"], hint_en: "TNSCERT Ch.6 (Sec 6.2.2): 'elif' in Python is short for 'else if' used in multi-way branching.", hint_ta: "பாடம் 6 (பிரிவு 6.2.2): 'elif' என்பது 'else if' என்பதன் சுருக்கமாகும்.", ans: 2 },
+                    { q_en: "What plays a vital role in Python programming?", q_ta: "பைத்தான் நிரலில் எது முக்கிய பங்கு வகிக்கிறது?", options_en: ["(A) Statements", "(B) Control", "(C) Structure", "(D) Indentation"], options_ta: ["(அ) கூற்றுகள்", "(ஆ) கட்டுப்பாடு", "(இ) அமைப்பு", "(ஈ) உள்தள்ளல்"], hint_en: "TNSCERT Ch.6 (Sec 6.1): Indentation (leading whitespace) defines code blocks in Python instead of curly braces { }.", hint_ta: "பாடம் 6 (பிரிவு 6.1): பைத்தானில் நிரல் தொகுதிகளை வரையறுக்க உள்தள்ளல் (Indentation) முக்கிய பங்கு வகிக்கிறது.", ans: 3 },
+                    { q_en: "Which statement is generally used as a placeholder?", q_ta: "எந்த கூற்று பொதுவாக இட நிரப்பியாக பயன்படுகிறது?", options_en: ["(A) continue", "(B) break", "(C) pass", "(D) goto"], options_ta: ["(அ) continue", "(ஆ) break", "(இ) pass", "(ஈ) goto"], hint_en: "TNSCERT Ch.6 (Sec 6.2.4): The 'pass' statement is a null operation used as a placeholder when a statement is syntactically required.", hint_ta: "பாடம் 6 (பிரிவு 6.2.4): எந்த செயலையும் செய்யாமல் இட நிரப்பியாக (Placeholder) பயன்படும் கூற்று 'pass'.", ans: 2 },
+                    { q_en: "The condition in the if statement should be in the form of", q_ta: "if கூற்றின் நிபந்தனை பின்வரும் எந்த வடிவில் இருக்க வேண்டும்?", options_en: ["(A) Arithmetic or Relational expression", "(B) Arithmetic or Logical expression", "(C) Relational or Logical expression", "(D) Arithmetic"], options_ta: ["(அ) கணித அல்லது ஒப்பீட்டுக் கோவைகள்", "(ஆ) கணித அல்லது தருக்கக் கோவைகள்", "(இ) ஒப்பீட்டு அல்லது தருக்கக் கோவைகள்", "(ஈ) கணித கோவைகள்"], hint_en: "TNSCERT Ch.6 (Sec 6.2.2): An 'if' condition must evaluate to True or False, so it uses Relational or Logical expressions.", hint_ta: "பாடம் 6 (பிரிவு 6.2.2): if நிபந்தனை சரி அல்லது தவறு என்ற விடையைத் தரும் வகையில் ஒப்பீட்டு அல்லது தருக்கக் கோவைகளாக இருக்க வேண்டும்.", ans: 2 },
+                    { q_en: "Which is the most comfortable loop?", q_ta: "பின்வரும் எது வரையறுக்கப்பட்ட மடக்கு ஆகும்?", options_en: ["(A) do..while", "(B) while", "(C) for", "(D) if..elif"], options_ta: ["(அ) do..while", "(ஆ) while", "(இ) for", "(ஈ) if..elif"], hint_en: "TNSCERT Ch.6 (Sec 6.2.3): The 'for' loop is the most comfortable/definite loop in Python, usually paired with range().", hint_ta: "பாடம் 6 (பிரிவு 6.2.3): பைத்தானில் range() செயற்கூறுடன் இணைந்து செயல்படும் 'for' மடக்கு மிகவும் எளிமையான/வரையறுக்கப்பட்ட மடக்கு ஆகும்.", ans: 2 },
+                    { q_en: "What is the output of the following snippet?\ni=1\nwhile True:\n  if i%3 == 0: break\n  print(i, end='')\n  i+=1", q_ta: "பின்வரும் குறிமுறையின் வெளியீடு என்ன?\ni=1\nwhile True:\n  if i%3 == 0: break\n  print(i, end='')\n  i+=1", options_en: ["(A) 12", "(B) 123", "(C) 1234", "(D) 124"], options_ta: ["(அ) 12", "(ஆ) 123", "(இ) 1234", "(ஈ) 124"], hint_en: "Trace: i=1 prints 1; i=2 prints 2; when i=3, i%3==0 is True so 'break' exits the loop before printing 3. Output: 12.", hint_ta: "படிநிலை: i=1 எனில் 1 அச்சாகும்; i=2 எனில் 2 அச்சாகும்; i=3 ஆகும்போது 3%3==0 என்பதால் break மடக்கை விட்டு வெளியேறும். விடை: 12.", ans: 0 },
+                    { q_en: "What is the output of the following snippet?\nT=1\nwhile T:\n  print(True)\n  break", q_ta: "பின்வரும் குறிமுறையின் வெளியீடு என்ன?\nT=1\nwhile T:\n  print(True)\n  break", options_en: ["(A) False", "(B) True", "(C) 0", "(D) no output"], options_ta: ["(அ) தவறு", "(ஆ) சரி", "(இ) 0", "(ஈ) வெளியீடு இல்லை"], hint_en: "Trace: In Python, non-zero value T=1 is treated as True. It enters the loop, prints True once, and hits break.", hint_ta: "படிநிலை: பைத்தானில் T=1 என்பது சரி (True) என எடுத்துக்கொள்ளப்படும். எனவே True என அச்சிட்டு break மூலம் வெளியேறும்.", ans: 1 },
+                    { q_en: "Which amongst this is not a jump statement?", q_ta: "பின்வருவனவற்றில் எது தாவல் கூற்று கிடையாது?", options_en: ["(A) for", "(B) goto", "(C) continue", "(D) break"], options_ta: ["(அ) for", "(ஆ) goto", "(இ) continue", "(ஈ) break"], hint_en: "TNSCERT Ch.6 (Sec 6.2.4): 'for' is an iterative looping statement, whereas break, continue, pass are jump/control transfer statements.", hint_ta: "பாடம் 6 (பிரிவு 6.2.4): 'for' என்பது ஒரு மடக்கு கூற்று; தாவல் கூற்று கிடையாது.", ans: 0 },
+                    { q_en: "Which punctuation should be used in the blank?\nif <condition> _\n  statements-block 1", q_ta: "எந்த நிறுத்தற்குறி பின்வரும் அடிக்கோடிட்ட இடத்தில் இடம் பெற வேண்டும்?\nif <condition> _\n  statements-block 1", options_en: ["(A) ;", "(B) :", "(C) ::", "(D) !"], options_ta: ["(அ) ;", "(ஆ) :", "(இ) ::", "(ஈ) !"], hint_en: "TNSCERT Ch.6 (Sec 6.2.2): Every compound header in Python (if, elif, else, for, while, def) must end with a colon (:).", hint_ta: "பாடம் 6 (பிரிவு 6.2.2): பைத்தானில் if நிபந்தனையின் இறுதியில் முக்காற்புள்ளி (:) இடம் பெற வேண்டும்.", ans: 1 }
+                ]
+            },
+            {
+                unit: 7,
+                name_en: "Python Functions",
+                name_ta: "பைத்தான் செயற்கூறுகள்",
+                questions: [
+                    { q_en: "A named blocks of code that are designed to do one specific job is called as", q_ta: "ஒரு குறிப்பிட்ட செயலைச் செய்வதற்காக வடிவமைக்கப்பட்டு, பெயரிடப்பட்ட குறிமுறையின் தொகுதி", options_en: ["(A) Loop", "(B) Branching", "(C) Function", "(D) Block"], options_ta: ["(அ) மடக்கு", "(ஆ) கிளைப்பிரிப்பு", "(இ) செயற்கூறு", "(ஈ) தொகுதி"], hint_en: "TNSCERT Ch.7 (Sec 7.1): Functions are named blocks of code designed to perform one specific job.", hint_ta: "பாடம் 7 (பிரிவு 7.1): ஒரு குறிப்பிட்ட வேலையைச் செய்ய பெயரிடப்பட்ட குறிமுறையின் தொகுதி 'செயற்கூறு' (Function).", ans: 2 },
+                    { q_en: "A Function which calls itself is called as", q_ta: "தன்னைத்தானே அழைத்துக் கொள்ளும் செயற்கூறை இவ்வாறு அழைப்பர்.", options_en: ["(A) Built-in", "(B) Recursion", "(C) Lambda", "(D) return"], options_ta: ["(அ) உள்ளிணைந்த", "(ஆ) தற்சுழற்சி", "(இ) லாம்டா", "(ஈ) return கூற்று"], hint_en: "TNSCERT Ch.7 (Sec 7.8): When a function calls itself repeatedly until a base condition is met, it is called Recursion.", hint_ta: "பாடம் 7 (பிரிவு 7.8): ஒரு செயற்கூறு தன்னைத்தானே அழைத்துக் கொள்வது தற்சுழற்சி (Recursion) எனப்படும்.", ans: 1 },
+                    { q_en: "Which function is called anonymous un-named function?", q_ta: "எந்த செயற்கூறை பெயரில்லா செயற்கூறு என்று அழைக்கப்படுகிறது?", options_en: ["(A) Lambda", "(B) Recursion", "(C) Function", "(D) define"], options_ta: ["(அ) லாம்டா", "(ஆ) தற்சுழற்சி", "(இ) செயற்கூறு", "(ஈ) வரையறை"], hint_en: "TNSCERT Ch.7 (Sec 7.6): Anonymous functions are defined without a name using the 'lambda' keyword.", hint_ta: "பாடம் 7 (பிரிவு 7.6): பெயரில்லாமல் 'lambda' என்ற சிறப்புச் சொல்லுடன் உருவாக்கப்படும் செயற்கூறு லாம்டா செயற்கூறு.", ans: 0 },
+                    { q_en: "Which of the following keyword is used to begin the function block?", q_ta: "செயற்கூறு தொகுதியை எந்த சிறப்புச்சொல் தொடங்கி வைக்கிறது?", options_en: ["(A) define", "(B) for", "(C) finally", "(D) def"], options_ta: ["(அ) define", "(ஆ) for", "(இ) finally", "(ஈ) def"], hint_en: "TNSCERT Ch.7 (Sec 7.2.1): Function blocks in Python always begin with the keyword 'def' followed by the function name.", hint_ta: "பாடம் 7 (பிரிவு 7.2.1): பைத்தானில் செயற்கூறு தொகுதி 'def' என்ற சிறப்புச் சொல்லுடன் தொடங்கும்.", ans: 3 },
+                    { q_en: "Which of the following keyword is used to exit a function block?", q_ta: "எந்த சிறப்புச்சொல் செயற்கூறு தொகுதியை முடித்து வைக்கிறது?", options_en: ["(A) define", "(B) return", "(C) finally", "(D) def"], options_ta: ["(அ) define", "(ஆ) return", "(இ) finally", "(ஈ) def"], hint_en: "TNSCERT Ch.7 (Sec 7.7): The 'return' statement causes the function to exit and passes back an expression to the caller.", hint_ta: "பாடம் 7 (பிரிவு 7.7): செயற்கூறு தொகுதியிலிருந்து வெளியேறி மதிப்பைத் திருப்பி அனுப்ப 'return' கூற்று பயன்படுகிறது.", ans: 1 },
+                    { q_en: "While defining a function which of the following symbol is used?", q_ta: "செயற்கூறு வரையறையில் பின்வரும் எந்த குறியீடு பயன்படுத்தப்படுகிறது?", options_en: ["(A) ;", "(B) .", "(C) :", "(D) $"], options_ta: ["(அ) ;", "(ஆ) .", "(இ) :", "(ஈ) $"], hint_en: "TNSCERT Ch.7 (Sec 7.2.1): Syntax: def <function_name> ([parameters]): — ends with a colon (:).", hint_ta: "பாடம் 7 (பிரிவு 7.2.1): செயற்கூறு வரையறையின் இறுதியில் முக்காற்புள்ளி (:) குறியீடு பயன்படுத்தப்படுகிறது.", ans: 2 },
+                    { q_en: "In which arguments the correct positional order is passed to a function?", q_ta: "செயற்கூறுக்கு எந்த செயலுருபு சரியான இட வரிசையில் செயலுருபுகளை அனுப்பும்?", options_en: ["(A) Required", "(B) Keyword", "(C) Default", "(D) Variable-length"], options_ta: ["(அ) தேவைப்படும்", "(ஆ) சிறப்புச்சொல்", "(இ) தானமைவு", "(ஈ) மாறி நீளம்"], hint_en: "TNSCERT Ch.7 (Sec 7.5.1): Required arguments are passed to a function in the exact positional order matching the parameters.", hint_ta: "பாடம் 7 (பிரிவு 7.5.1): செயற்கூறு வரையறையின் அளபுருக்களுக்கு ஏற்ப சரியான இட வரிசையில் அனுப்பப்படுவது தேவைப்படும் செயலுருபுகள் (Required arguments).", ans: 0 },
+                    { q_en: "Read the following statement and choose the correct statement(s):\n(I) In Python, you don’t have to mention the specific data types while defining function.\n(II) Python keywords can be used as function name.", q_ta: "பின்வரும் கூற்றுகளைப் படித்து, சரியான கூற்றுகளைத் தேர்ந்து எடுக்கவும்:\n(I) பைத்தானில், செயற்கூறை வரையறுக்கும் போது குறிப்பிட்ட தரவு வகைகளைக் குறிப்பிடத் தேவையில்லை.\n(II) பைத்தான் சிறப்புச் சொற்களைச் செயற்கூறின் பெயராகப் பயன்படுத்தலாம்.", options_en: ["(A) I is correct and II is wrong", "(B) Both are correct", "(C) I is wrong and II is correct", "(D) Both are wrong"], options_ta: ["(அ) I சரி மற்றும் II தவறு", "(ஆ) இரண்டுமே சரி", "(இ) I தவறு மற்றும் II சரி", "(ஈ) இரண்டுமே தவறு"], hint_en: "TNSCERT Ch.7 (Sec 7.2.1): Python is dynamically typed (I is True), and reserved keywords can NEVER be used as identifiers/function names (II is False).", hint_ta: "பாடம் 7 (பிரிவு 7.2.1): பைத்தானில் தரவு வகைகளைக் குறிப்பிடத் தேவையில்லை (I சரி); சிறப்புச் சொற்களை செயற்கூறு பெயராகப் பயன்படுத்தக் கூடாது (II தவறு).", ans: 0 },
+                    { q_en: "Pick the correct one to execute the given statement successfully.\nif ____ : print(x, 'is a leap year')", q_ta: "கொடுக்கப்பட்ட கூற்றை வெற்றிகரமாக நிறைவேற்றுவதற்கு, பின்வருவனவற்றுள் சரியான ஒன்றைத் தேர்ந்தெடு.\nif ____ : print(x, 'is a leap year')", options_en: ["(A) x%2=0", "(B) x%4==0", "(C) x/4=0", "(D) x%4=0"], options_ta: ["(அ) x%2=0", "(ஆ) x%4==0", "(இ) x/4=0", "(ஈ) x%4=0"], hint_en: "TNSCERT Ch.7: A leap year is divisible by 4 (remainder 0), and relational equality uses double equals '==', so x%4==0.", hint_ta: "பாடம் 7: லீப் ஆண்டு 4-ஆல் மீதியின்றி வகுபடும் (x%4), மற்றும் சமநிலையைச் சோதிக்க '==' பயன்படுவதால் x%4==0 சரியானது.", ans: 1 },
+                    { q_en: "Which of the following keyword is used to define the function testpython(): ?", q_ta: "testpython(): என்ற செயற்கூறை வரையறுக்க பின்வரும் எந்த சிறப்புச்சொல் பயன்படுகிறது?", options_en: ["(A) define", "(B) pass", "(C) def", "(D) while"], options_ta: ["(அ) define", "(ஆ) pass", "(இ) def", "(ஈ) while"], hint_en: "TNSCERT Ch.7 (Sec 7.2.1): Use 'def testpython():' to define the function.", hint_ta: "பாடம் 7 (பிரிவு 7.2.1): செயற்கூறை வரையறுக்க 'def' என்ற சிறப்புச் சொல் பயன்படுகிறது.", ans: 2 }
+                ]
+            },
+            {
+                unit: 8,
+                name_en: "Strings and String Manipulation",
+                name_ta: "சரங்கள் மற்றும் சரங்களைக் கையாளுதல்",
+                questions: [
+                    { q_en: "Which of the following is the output of the following python code?\nstr1=\"TamilNadu\"\nprint(str1[::-1])", q_ta: "பின்வருவனவற்றுள் எது கீழ்க்கண்ட பைத்தான் நிரலுக்கான வெளியீடாகும்?\nstr1=\"TamilNadu\"\nprint(str1[::-1])", options_en: ["(A) TamilNadu", "(B) Tmlau", "(C) udanlimaT", "(D) udaNlimaT"], options_ta: ["(அ) TamilNadu", "(ஆ) Tmlau", "(இ) udanlimaT", "(ஈ) udaNlimaT"], hint_en: "TNSCERT Ch.8 (Sec 8.4.2): A negative stride of -1 in slicing [::-1] reverses the string character by character: 'udaNlimaT'.", hint_ta: "பாடம் 8 (பிரிவு 8.4.2): [::-1] என்பதில் -1 என்ற எதிர்மறை stride சரத்தை தலைகீழாக மாற்றும்: 'udaNlimaT'.", ans: 3 },
+                    { q_en: "What will be the output of the following code?\nstr1 = \"Chennai Schools\"\nstr1[7] = \"-\"", q_ta: "பின்வரும் குறிமுறைக்கான வெளியீடு யாது?\nstr1 = \"Chennai Schools\"\nstr1[7] = \"-\"", options_en: ["(A) Chennai-Schools", "(B) Chenna-School", "(C) Type error", "(D) Chennai"], options_ta: ["(அ) Chennai-Schools", "(ஆ) Chenna-School", "(இ) Type error", "(ஈ) Chennai"], hint_en: "TNSCERT Ch.8 (Sec 8.3): Strings in Python are immutable! Trying to modify a single character via str1[7]='-' raises a TypeError.", hint_ta: "பாடம் 8 (பிரிவு 8.3): பைத்தானில் சரங்கள் மாற்ற முடியாதவை (Immutable). எனவே str1[7]='-' என மாற்ற முயன்றால் Type error ஏற்படும்.", ans: 2 },
+                    { q_en: "Which of the following operator is used for concatenation?", q_ta: "பின்வருவனவற்றுள் எது சரங்களை இணைக்க பயன்படும் செயற்குறியாகும்?", options_en: ["(A) +", "(B) &", "(C) *", "(D) ="], options_ta: ["(அ) +", "(ஆ) &", "(இ) *", "(ஈ) ="], hint_en: "TNSCERT Ch.8 (Sec 8.4.1): Joining two or more strings together is called concatenation and uses the '+' operator.", hint_ta: "பாடம் 8 (பிரிவு 8.4.1): இரண்டு அல்லது அதற்கு மேற்பட்ட சரங்களை இணைக்க (Concatenation) '+' செயற்குறி பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Defining strings within triple quotes allows creating:", q_ta: "மூன்று மேற்கோள் குறிகளுக்குள் தரப்படும் சரமானது பின்வருபவனவற்றில் எதை உருவாக்க அனுமதிக்கும்?", options_en: ["(A) Single line Strings", "(B) Multiline Strings", "(C) Double line Strings", "(D) Multiple Strings"], options_ta: ["(அ) ஒரு வரி சரம்", "(ஆ) பல வரி சரங்கள்", "(இ) இரு வரி சரம்", "(ஈ) ஒன்றுக்கு மேற்பட்ட சரங்கள்"], hint_en: "TNSCERT Ch.8 (Sec 8.2): Triple quotes (''' ... ''' or \"\"\" ... \"\"\") allow strings to span across multiple lines.", hint_ta: "பாடம் 8 (பிரிவு 8.2): மூன்று மேற்கோள் குறிகள் (''' ''' அல்லது \"\"\" \"\"\") பல வரி சரங்களை (Multiline Strings) உருவாக்கப் பயன்படுகிறது.", ans: 1 },
+                    { q_en: "Strings in python:", q_ta: "பைத்தானில் சரங்களானது:", options_en: ["(A) Changeable", "(B) Mutable", "(C) Immutable", "(D) flexible"], options_ta: ["(அ) மாற்றக்கூடியது", "(ஆ) Mutable", "(இ) மாறாத்தன்மையுடையது (Immutable)", "(ஈ) நெகிழ்வானது"], hint_en: "TNSCERT Ch.8 (Sec 8.3): Once a string is defined in Python, its characters cannot be altered in place (Immutable).", hint_ta: "பாடம் 8 (பிரிவு 8.3): பைத்தானில் சரங்களை ஒருமுறை உருவாக்கிய பின் மாற்ற முடியாது (Immutable / மாறாத்தன்மையுடையது).", ans: 2 },
+                    { q_en: "Which of the following is the slicing operator?", q_ta: "பின்வருவனவற்றுள் எது சரத்தினை துண்டாக்கும் (Slicing) செயற்குறியாகும்?", options_en: ["(A) { }", "(B) [ ]", "(C) < >", "(D) ( )"], options_ta: ["(அ) { }", "(ஆ) [ ]", "(இ) < >", "(ஈ) ( )"], hint_en: "TNSCERT Ch.8 (Sec 8.4.2): Square brackets [start:end] are used as the slicing operator to extract substrings.", hint_ta: "பாடம் 8 (பிரிவு 8.4.2): சரத்தின் ஒரு பகுதியைத் துண்டாக்க (Slicing) சதுர அடைப்புக்குறி [ ] பயன்படுகிறது.", ans: 1 },
+                    { q_en: "What is stride?", q_ta: "stride என்பது பின்வருபவனவற்றில் எதை குறிக்கும்?", options_en: ["(A) index value of slide operation", "(B) first argument of slice operation", "(C) second argument of slice operation", "(D) third argument of slice operation"], options_ta: ["(அ) slide செயல்பாட்டின் கீழ்ஒட்டு மதிப்பாகும்", "(ஆ) slice செயற்பாட்டின் முதல் அளபுருவாகும்", "(இ) slice செயற்பாட்டின் இரண்டாவது அளபுருவாகும்", "(ஈ) slice செயற்பாட்டின் மூன்றாவது அளபுருவாகும்"], hint_en: "TNSCERT Ch.8 (Sec 8.4.2): In str[start:end:stride], stride is the third argument specifying how many characters to step forward.", hint_ta: "பாடம் 8 (பிரிவு 8.4.2): [start:end:stride] என்பதில் stride என்பது மூன்றாவது அளபுருவாகும்.", ans: 3 },
+                    { q_en: "Which of the following formatting character is used to print exponential notation in upper case?", q_ta: "பின்வரும் வடிவமைப்பு குறியுருக்களுள் அடுக்கு குறியீட்டில் அச்சிட உதவும் மேல் எழுத்து எது?", options_en: ["(A) %e", "(B) %E", "(C) %g", "(D) %n"], options_ta: ["(அ) %e", "(ஆ) %E", "(இ) %g", "(ஈ) %n"], hint_en: "TNSCERT Ch.8 (Sec 8.5): '%e' prints exponential notation in lowercase, while '%E' prints it in uppercase.", hint_ta: "பாடம் 8 (பிரிவு 8.5): அடுக்கு குறியீட்டை (Exponential) பெரிய எழுத்தில் (Upper case) அச்சிட '%E' பயன்படுகிறது.", ans: 1 },
+                    { q_en: "Which of the following is used as placeholders or replacement fields which get replaced along with format() function?", q_ta: "பின்வருபவனற்றுள் எந்தக் குறியீடு format() செயற்கூறுடன் பயன்படும் பதிலீடு குறியீடாகும்?", options_en: ["(A) { }", "(B) < >", "(C) ++", "(D) ^^"], options_ta: ["(அ) { }", "(ஆ) < >", "(இ) ++", "(ஈ) ^^"], hint_en: "TNSCERT Ch.8 (Sec 8.5.1): Curly braces { } act as placeholders in strings when used with the .format() method.", hint_ta: "பாடம் 8 (பிரிவு 8.5.1): format() செயற்கூறுடன் இணைந்து பதிலீடு குறியீடாக (Placeholder) '{ }' பயன்படுகிறது.", ans: 0 },
+                    { q_en: "The subscript of a string may be:", q_ta: "சரத்தின் கீழ் ஒட்டானது:", options_en: ["(A) Positive", "(B) Negative", "(C) Both (a) and (b)", "(D) Either (a) or (b)"], options_ta: ["(அ) நேர்மறை எண்கள்", "(ஆ) எதிர்மறை எண்கள்", "(இ) (அ) மற்றும் (ஆ)", "(ஈ) (அ) அல்லது (ஆ)"], hint_en: "TNSCERT Ch.8 (Sec 8.3): String indices (subscripts) can be either positive (0, 1, 2...) or negative (-1, -2...).", hint_ta: "பாடம் 8 (பிரிவு 8.3): சரத்தின் கீழ் ஒட்டு (Subscript) நேர்மறை எண்களாகவோ அல்லது எதிர்மறை எண்களாகவோ இருக்கலாம்.", ans: 3 }
+                ]
+            },
+            {
+                unit: 9,
+                name_en: "Lists, Tuples, Sets and Dictionary",
+                name_ta: "தொகுப்பு தரவினங்கள்",
+                questions: [
+                    { q_en: "Pick odd one in connection with collection data type", q_ta: "தரவினத் தொகுதியின் தொடர்பில்லாத ஒன்றைத் தேர்வு செய்க.", options_en: ["(A) List", "(B) Tuple", "(C) Dictionary", "(D) Loop"], options_ta: ["(அ) List", "(ஆ) Tuple", "(இ) Dictionary", "(ஈ) Loop"], hint_en: "TNSCERT Ch.9 (Sec 9.1): Python has 4 collection data types: List, Tuple, Set, and Dictionary. 'Loop' is a control structure.", hint_ta: "பாடம் 9 (பிரிவு 9.1): List, Tuple, Set, Dictionary ஆகியவை தொகுப்பு தரவினங்கள்; Loop என்பது மடக்கு கட்டமைப்பு.", ans: 3 },
+                    { q_en: "Let list1=[2,4,6,8,10], then print(list1[-2]) will result in", q_ta: "Let list1=[2,4,6,8,10], எனில் print(list1[-2]) இன் வெளியீடு என்ன?", options_en: ["(A) 10", "(B) 8", "(C) 4", "(D) 6"], options_ta: ["(அ) 10", "(ஆ) 8", "(இ) 4", "(ஈ) 6"], hint_en: "TNSCERT Ch.9 (Sec 9.1.2): Negative index -1 is the last element (10), and -2 is the second-last element (8).", hint_ta: "பாடம் 9 (பிரிவு 9.1.2): எதிர்மறை சுட்டெண் -1 கடைசி உறுப்பையும் (10), -2 கடைசிக்கு முந்தைய உறுப்பையும் (8) குறிக்கும்.", ans: 1 },
+                    { q_en: "Which of the following function is used to count the number of elements in a list?", q_ta: "பின்வரும் எந்த செயற்கூறு List-ல் உள்ள உறுப்புகளின் எண்ணிக்கையைக் கணக்கிட பயன்படுகிறது?", options_en: ["(A) count()", "(B) find()", "(C) len()", "(D) index()"], options_ta: ["(அ) count()", "(ஆ) find()", "(இ) len()", "(ஈ) index()"], hint_en: "TNSCERT Ch.9 (Sec 9.1.3): The len(list) function returns the total number of elements in a list.", hint_ta: "பாடம் 9 (பிரிவு 9.1.3): List-ல் உள்ள மொத்த உறுப்புகளின் எண்ணிக்கையைக் கண்டறிய len() செயற்கூறு பயன்படுகிறது.", ans: 2 },
+                    { q_en: "If List=[10,20,30,40,50] then List[2]=35 will result", q_ta: "If List=[10,20,30,40,50] எனில் List[2]=35 என்பதன் வெளியீடு என்ன?", options_en: ["(A) [35,10,20,30,40,50]", "(B) [10,20,30,40,50,35]", "(C) [10,20,35,40,50]", "(D) [10,35,30,40,50]"], options_ta: ["(அ) [35,10,20,30,40,50]", "(ஆ) [10,20,30,40,50,35]", "(இ) [10,20,35,40,50]", "(ஈ) [10,35,30,40,50]"], hint_en: "TNSCERT Ch.9 (Sec 9.1.4): Index 0 is 10, index 1 is 20, index 2 is 30. Replacing List[2]=35 updates 30 to 35.", hint_ta: "பாடம் 9 (பிரிவு 9.1.4): சுட்டெண் 0=10, 1=20, 2=30. List[2]=35 என மாற்றும்போது 30-க்குப் பதிலாக 35 மாறும்.", ans: 2 },
+                    { q_en: "If List=[17,23,41,10] then List.append(32) will result", q_ta: "If List=[17,23,41,10] எனில் List.append(32) என்பதன் வெளியீடு என்ன?", options_en: ["(A) [32,17,23,41,10]", "(B) [17,23,41,10,32]", "(C) [10,17,23,32,41]", "(D) [41,32,23,17,10]"], options_ta: ["(அ) [32,17,23,41,10]", "(ஆ) [17,23,41,10,32]", "(இ) [10,17,23,32,41]", "(ஈ) [41,32,23,17,10]"], hint_en: "TNSCERT Ch.9 (Sec 9.1.5): The append() function adds a single element to the very end of the list.", hint_ta: "பாடம் 9 (பிரிவு 9.1.5): append() செயற்கூறு புதிய உறுப்பை பட்டியலின் இறுதியில் சேர்க்கும்.", ans: 1 },
+                    { q_en: "Which of the following Python function can be used to add more than one element within an existing list?", q_ta: "பின்வரும் எந்த பைத்தான் செயற்கூறு ஏற்கனவே உள்ள List-ல் ஒன்றுக்கும் மேற்பட்ட உறுப்புகளை சேர்க்கப் பயன்படுகிறது?", options_en: ["(A) append()", "(B) append_more()", "(C) extend()", "(D) more()"], options_ta: ["(அ) append()", "(ஆ) append_more()", "(இ) extend()", "(ஈ) more()"], hint_en: "TNSCERT Ch.9 (Sec 9.1.5): append() adds one element, whereas extend() adds multiple elements at the end of a list.", hint_ta: "பாடம் 9 (பிரிவு 9.1.5): ஒன்றுக்கும் மேற்பட்ட உறுப்புகளை ஏற்கனவே உள்ள List-ன் இறுதியில் சேர்க்க extend() பயன்படுகிறது.", ans: 2 },
+                    { q_en: "What will be the result of the following Python code?\nS=[x**2 for x in range(5)]\nprint(S)", q_ta: "பின்வரும் பைத்தான் குறிமுறையின் விடை என்ன?\nS=[x**2 for x in range(5)]\nprint(S)", options_en: ["(A) [0,1,2,4,5]", "(B) [0,1,4,9,16]", "(C) [0,1,4,9,16,25]", "(D) [1,4,9,16,25]"], options_ta: ["(அ) [0,1,2,4,5]", "(ஆ) [0,1,4,9,16]", "(இ) [0,1,4,9,16,25]", "(ஈ) [1,4,9,16,25]"], hint_en: "TNSCERT Ch.9 (Sec 9.1.7): range(5) produces 0, 1, 2, 3, 4. Squaring each (x**2) gives [0, 1, 4, 9, 16].", hint_ta: "பாடம் 9 (பிரிவு 9.1.7): range(5) என்பது 0, 1, 2, 3, 4 ஆகிய மதிப்புகளைத் தரும்; அவற்றின் வர்க்கம் (x**2) [0,1,4,9,16].", ans: 1 },
+                    { q_en: "What is the use of type() function in python?", q_ta: "பைத்தானில் type() செயற்கூறின் பயன் என்ன?", options_en: ["(A) To create a Tuple", "(B) To know the type of an element in tuple", "(C) To know the data type of python object", "(D) To create a list"], options_ta: ["(அ) Tuple உருவாக்க", "(ஆ) Tuple உள்ள உறுப்புகளின் வகையைக் கண்டறிய", "(இ) பைத்தான் பொருளின் தரவினத்தை கண்டறிய", "(ஈ) பட்டியலை உருவாக்க"], hint_en: "TNSCERT Ch.9 (Sec 9.2): The type() function returns the data type of any Python object.", hint_ta: "பாடம் 9 (பிரிவு 9.2): ஒரு பைத்தான் பொருளின் தரவினத்தைக் (Data type) கண்டறிய type() செயற்கூறு பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Which of the following statement is not correct?", q_ta: "பின்வரும் எந்த கூற்று சரியானது அல்ல?", options_en: ["(A) A list is mutable", "(B) A tuple is immutable", "(C) The append() function is used to add an element", "(D) The extend() function is used in tuple to add elements in a list"], options_ta: ["(அ) List மாற்றம் செய்யலாம்", "(ஆ) Tuples மாற்றம் செய்ய முடியாது", "(இ) Append() செயற்கூறு ஒரு உறுப்பை சேர்க்க பயன்படுகிறது", "(ஈ) Extend() செயற்கூறு லிஸ்ட்ல் உறுப்புகளை சேர்க்க Tuples-ல் பயன்படுகிறது"], hint_en: "TNSCERT Ch.9 (Sec 9.2): Tuples are immutable and do not have an extend() method; extend() belongs to Lists.", hint_ta: "பாடம் 9 (பிரிவு 9.2): Tuples மாற்ற முடியாதவை; அதில் extend() செயற்கூறு கிடையாது. எனவே கூற்று (ஈ) தவறானது.", ans: 3 },
+                    { q_en: "Let setA={3,6,9}, setB={1,3,9}. What will be the result of print(setA | setB)?", q_ta: "Let setA={3,6,9}, setB={1,3,9} எனில் print(setA | setB) இன் வெளியீடு என்ன?", options_en: ["(A) {3,6,9,1,3,9}", "(B) {3,9}", "(C) {1}", "(D) {1,3,6,9}"], options_ta: ["(அ) {3,6,9,1,3,9}", "(ஆ) {3,9}", "(இ) {1}", "(ஈ) {1,3,6,9}"], hint_en: "TNSCERT Ch.9 (Sec 9.3.1): The '|' operator performs Set Union, combining all unique elements without duplicates: {1,3,6,9}.", hint_ta: "பாடம் 9 (பிரிவு 9.3.1): '|' செயற்குறி இரு கணங்களின் சேர்ப்பை (Union) நகல்கள் இல்லாமல் தரும்: {1,3,6,9}.", ans: 3 }
+                ]
+            },
+            {
+                unit: 10,
+                name_en: "Python Classes and Objects",
+                name_ta: "பைத்தான் இனக்குழுக்கள் மற்றும் பொருள்கள்",
+                questions: [
+                    { q_en: "Which of the following are the key features of an Object Oriented Programming language?", q_ta: "பின்வருவனவற்றுள் எவை பொருள் நோக்கு நிரலாக்கத்தின் முக்கிய அம்சம் ஆகும்?", options_en: ["(A) Constructor and Classes", "(B) Constructor and Object", "(C) Classes and Objects", "(D) Constructor and Destructor"], options_ta: ["(அ) ஆக்கி மற்றும் இனக்குழு", "(ஆ) ஆக்கி மற்றும் பொருள்", "(இ) இனக்குழு மற்றும் பொருள்", "(ஈ) ஆக்கி மற்றும் அழிப்பி"], hint_en: "TNSCERT Ch.10 (Sec 10.1): Classes and Objects are the two fundamental key features of Object Oriented Programming.", hint_ta: "பாடம் 10 (பிரிவு 10.1): இனக்குழு மற்றும் பொருள் (Classes and Objects) பொருள் நோக்கு நிரலாக்கத்தின் முக்கிய அம்சங்களாகும்.", ans: 2 },
+                    { q_en: "Functions defined inside a class:", q_ta: "இனக்குழுவின் உள்ளே வரையறுக்கப்படும் செயற்கூறு எது?", options_en: ["(A) Functions", "(B) Module", "(C) Methods", "(D) section"], options_ta: ["(அ) செயற்கூறு", "(ஆ) கூறு", "(இ) வழிமுறை (Method)", "(ஈ) பிரிவு"], hint_en: "TNSCERT Ch.10 (Sec 10.2): Functions defined inside a class are called Methods.", hint_ta: "பாடம் 10 (பிரிவு 10.2): இனக்குழுவின் உள்ளே வரையறுக்கப்படும் செயற்கூறுகள் 'வழிமுறைகள்' (Methods) என அழைக்கப்படுகின்றன.", ans: 2 },
+                    { q_en: "Class members are accessed through which operator?", q_ta: "இனக்குழு உறுப்புகள் எந்த செயற்குறியின் மூலம் அணுகப்படுகிறது?", options_en: ["(A) &", "(B) .", "(C) #", "(D) %"], options_ta: ["(அ) &", "(ஆ) . (புள்ளி)", "(இ) #", "(ஈ) %"], hint_en: "TNSCERT Ch.10 (Sec 10.4): Class members (variables and methods) are accessed using the object name followed by the dot (.) operator.", hint_ta: "பாடம் 10 (பிரிவு 10.4): இனக்குழு உறுப்புகள் பொருளின் பெயருடன் புள்ளி (.) செயற்குறியைப் பயன்படுத்தி அணுகப்படுகின்றன.", ans: 1 },
+                    { q_en: "Which of the following method is automatically executed when an object is created?", q_ta: "பொருள் உருவாக்கப்படும் போது தானாகவே இயக்கப்படும் செயற்கூறு எது?", options_en: ["(A) __object__()", "(B) __del__()", "(C) __func__()", "(D) __init__()"], options_ta: ["(அ) __object__()", "(ஆ) __del__()", "(இ) __func__()", "(ஈ) __init__()"], hint_en: "TNSCERT Ch.10 (Sec 10.6): __init__() acts as the Constructor in Python and executes automatically when an object is instantiated.", hint_ta: "பாடம் 10 (பிரிவு 10.6): பொருள் உருவாக்கப்படும்போது தானாகவே இயங்கும் ஆக்கி (Constructor) செயற்கூறு __init__() ஆகும்.", ans: 3 },
+                    { q_en: "A private class variable is prefixed with", q_ta: "private இனக்குழு மாறியின் முன்னொட்டு எது?", options_en: ["(A) __", "(B) &&", "(C) ##", "(D) **"], options_ta: ["(அ) __ (இரட்டை அடிக்கீறல்)", "(ஆ) &&", "(இ) ##", "(ஈ) **"], hint_en: "TNSCERT Ch.10 (Sec 10.7): Any variable prefixed with a double underscore (__) becomes private in Python.", hint_ta: "பாடம் 10 (பிரிவு 10.7): மாறியின் பெயருக்கு முன்னால் இரட்டை அடிக்கீறல் (__) இட்டால் அது private மாறியாகும்.", ans: 0 },
+                    { q_en: "Which of the following method is used as destructor?", q_ta: "பின்வரும் வழிமுறைகளில் எது அழிப்பியாகப் பயன்படுகிறது?", options_en: ["(A) __init__()", "(B) __dest__()", "(C) __rem__()", "(D) __del__()"], options_ta: ["(அ) __init__()", "(ஆ) __dest__()", "(இ) __rem__()", "(ஈ) __del__()"], hint_en: "TNSCERT Ch.10 (Sec 10.6): __del__() is the destructor method called automatically when an object's scope ends.", hint_ta: "பாடம் 10 (பிரிவு 10.6): பொருளின் பயன்பாடு முடிவுக்கு வரும்போது தானாக இயங்கும் அழிப்பி (Destructor) __del__() ஆகும்.", ans: 3 },
+                    { q_en: "Which of the following class declaration is correct?", q_ta: "பின்வருவனவற்றுள் எந்த இனக்குழு அறிவிப்பு சரியானது?", options_en: ["(A) class class_name", "(B) class class_name<>", "(C) class class_name:", "(D) class class_name[]"], options_ta: ["(அ) class class_name", "(ஆ) class class_name<>", "(இ) class class_name:", "(ஈ) class class_name[]"], hint_en: "TNSCERT Ch.10 (Sec 10.2): Class definitions begin with the keyword 'class', followed by the class name and a colon (:).", hint_ta: "பாடம் 10 (பிரிவு 10.2): இனக்குழு அறிவிப்பு 'class class_name:' என முக்காற்புள்ளியுடன் முடிய வேண்டும்.", ans: 2 },
+                    { q_en: "What is the output of the following program?\nclass Student:\n  def __init__(self, name):\n    self.name=name\n    print(self.name)\nS=Student('Tamil')", q_ta: "பின்வரும் நிரலின் வெளியீடு என்ன?\nclass Student:\n  def __init__(self, name):\n    self.name=name\n    print(self.name)\nS=Student('Tamil')", options_en: ["(A) Error", "(B) Tamil", "(C) name", "(D) self"], options_ta: ["(அ) Error", "(ஆ) Tamil", "(இ) name", "(ஈ) self"], hint_en: "TNSCERT Ch.10 (Sec 10.6): Creating S=Student('Tamil') calls __init__ with 'Tamil', assigns self.name='Tamil', and prints 'Tamil'.", hint_ta: "பாடம் 10 (பிரிவு 10.6): S=Student('Tamil') என பொருள் உருவாக்கும்போது __init__ இயங்கி 'Tamil' என்பதை அச்சிடும்.", ans: 1 },
+                    { q_en: "Which of the following is the private class variable?", q_ta: "பின்வருவனவற்றுள் எது private இனக்குழு மாறி?", options_en: ["(A) __num", "(B) ##num", "(C) $$num", "(D) &&num"], options_ta: ["(அ) __num", "(ஆ) ##num", "(இ) $$num", "(ஈ) &&num"], hint_en: "TNSCERT Ch.10 (Sec 10.7): Double underscore prefix '__num' denotes a private class variable.", hint_ta: "பாடம் 10 (பிரிவு 10.7): இரட்டை அடிக்கீறல் முன்னொட்டு கொண்ட '__num' என்பதே private மாறி.", ans: 0 },
+                    { q_en: "The process of creating an object is called as:", q_ta: "பொருளை உருவாக்கும் செயல்முறை எவ்வாறு அழைக்கப்படுகிறது?", options_en: ["(A) Constructor", "(B) Destructor", "(C) Initialize", "(D) Instantiation"], options_ta: ["(அ) ஆக்கி", "(ஆ) அழிப்பி", "(இ) மதிப்பிருத்தல்", "(ஈ) சான்றுருவாக்கல் (Instantiation)"], hint_en: "TNSCERT Ch.10 (Sec 10.3): Creating an instance (object) of a class is called Instantiation.", hint_ta: "பாடம் 10 (பிரிவு 10.3): இனக்குழுவிலிருந்து ஒரு பொருளை உருவாக்கும் செயல்முறை 'சான்றுருவாக்கல்' (Instantiation) எனப்படும்.", ans: 3 }
+                ]
+            },
+            {
+                unit: 11,
+                name_en: "Database Concepts",
+                name_ta: "தரவுதள கருத்துருக்கள்",
+                questions: [
+                    { q_en: "What is the acronym of DBMS?", q_ta: "DBMS-ன் விரிவாக்கம் என்ன?", options_en: ["(A) DataBase Management Symbol", "(B) Database Managing System", "(C) DataBase Management System", "(D) DataBasic Management System"], options_ta: ["(அ) DataBase Management Symbol", "(ஆ) Database Managing System", "(இ) DataBase Management System", "(ஈ) DataBasic Management System"], hint_en: "TNSCERT Ch.11 (Sec 11.2): DBMS stands for DataBase Management System.", hint_ta: "பாடம் 11 (பிரிவு 11.2): DBMS என்பதன் விரிவாக்கம் DataBase Management System.", ans: 2 },
+                    { q_en: "A table is known as", q_ta: "ஒரு அட்டவணை என்பது எதைக் குறிக்கிறது?", options_en: ["(A) tuple", "(B) attribute", "(C) relation", "(D) entity"], options_ta: ["(அ) வரிசை (tuple)", "(ஆ) பண்புக்கூறுகள் (attribute)", "(இ) உறவுகள் (relation)", "(ஈ) அமைப்பு (entity)"], hint_en: "TNSCERT Ch.11 (Sec 11.3): In relational database terminology, a Table is called a Relation, a Row is a Tuple, and a Column is an Attribute.", hint_ta: "பாடம் 11 (பிரிவு 11.3): உறவுநிலை தரவுதளத்தில் ஒரு அட்டவணை 'உறவுகள்' (Relation) என அழைக்கப்படுகிறது.", ans: 2 },
+                    { q_en: "Which database model represents parent-child relationship?", q_ta: "எந்த தரவுதள மாதிரி பெற்றோர் குழந்தை உறவுநிலையைக் குறிப்பிடுகிறது?", options_en: ["(A) Relational", "(B) Network", "(C) Hierarchical", "(D) Object"], options_ta: ["(அ) உறவுநிலை", "(ஆ) வலையமைப்பு", "(இ) படிநிலை (Hierarchical)", "(ஈ) பொருள் நோக்கு"], hint_en: "TNSCERT Ch.11 (Sec 11.4.1): Hierarchical model organizes data in a tree-like structure with a parent-child relationship.", hint_ta: "பாடம் 11 (பிரிவு 11.4.1): படிநிலை (Hierarchical) தரவுதள மாதிரி பெற்றோர்-குழந்தை உறவுநிலையைக் குறிக்கிறது.", ans: 2 },
+                    { q_en: "Relational database model was first proposed by", q_ta: "உறவுநிலை தரவுதள மாதிரி முதலில் யாரால் முன்மொழியப்பட்டது?", options_en: ["(A) E F Codd", "(B) E E Codd", "(C) E F Codder", "(D) E F Cadd"], options_ta: ["(அ) E.F.Codd", "(ஆ) E.E.Codd", "(இ) E.F.Codder", "(ஈ) E.F.Cadd"], hint_en: "TNSCERT Ch.11 (Sec 11.4.2): Dr. Edgar Frank Codd (E.F. Codd) proposed the Relational Database Model in 1970.", hint_ta: "பாடம் 11 (பிரிவு 11.4.2): 1970-ல் E.F. Codd என்பவரால் உறவுநிலை தரவுதள மாதிரி முன்மொழியப்பட்டது.", ans: 0 },
+                    { q_en: "What type of relationship does hierarchical model represents?", q_ta: "படிநிலை தரவுதள மாதிரி எந்த வகை உறவு நிலையை குறிப்பிடுகிறது?", options_en: ["(A) one-to-one", "(B) one-to-many", "(C) many-to-one", "(D) many-to-many"], options_ta: ["(அ) ஒன்று ஒன்று", "(ஆ) ஒன்று பல", "(இ) பல ஒன்று", "(ஈ) பல பல"], hint_en: "TNSCERT Ch.11 (Sec 11.4.1): In a hierarchical model, one parent can have many children (one-to-many relationship).", hint_ta: "பாடம் 11 (பிரிவு 11.4.1): ஒரு பெற்றோருக்குப் பல குழந்தைகள் என்ற அடிப்படையில் 'ஒன்று பல' (one-to-many) உறவுநிலையைக் குறிக்கும்.", ans: 1 },
+                    { q_en: "Who is called Father of Relational Database from the following?", q_ta: "உறவுநிலை தரவுதளத்தின் தந்தை என அழைக்கப்படுபவர் யார்?", options_en: ["(A) Chris Date", "(B) Hugh Darween", "(C) Edgar Frank Codd", "(D) Edgar Frank Cadd"], options_ta: ["(அ) Chris Date", "(ஆ) Hugh Darween", "(இ) Edgar Frank Codd", "(ஈ) Edgar Frank Cadd"], hint_en: "TNSCERT Ch.11 (Sec 11.4.2): Edgar Frank Codd is known as the Father of Relational Database.", hint_ta: "பாடம் 11 (பிரிவு 11.4.2): உறவுநிலை தரவுதளத்தின் தந்தை Edgar Frank Codd ஆவார்.", ans: 2 },
+                    { q_en: "Which of the following is an RDBMS?", q_ta: "பின்வருவனவற்றுள் எது RDBMS ஆகும்?", options_en: ["(A) Dbase", "(B) Foxpro", "(C) Microsoft Access", "(D) MS-Excel"], options_ta: ["(அ) Dbase", "(ஆ) Foxpro", "(இ) Microsoft Access", "(ஈ) MS-Excel"], hint_en: "TNSCERT Ch.11 (Sec 11.7): MySQL, Oracle, SQL Server, and Microsoft Access are RDBMS software.", hint_ta: "பாடம் 11 (பிரிவு 11.7): MySQL, Oracle, Microsoft Access ஆகியவை RDBMS மென்பொருள்களாகும்.", ans: 2 },
+                    { q_en: "What symbol is used for SELECT statement?", q_ta: "SELECT கூற்றுக்கு பயன்படும் சின்னம் யாது?", options_en: ["(A) σ", "(B) Π", "(C) X", "(D) Ω"], options_ta: ["(அ) σ (சிக்மா)", "(ஆ) Π (பை)", "(இ) X", "(ஈ) Ω"], hint_en: "TNSCERT Ch.11 (Sec 11.8.1): In Relational Algebra, Sigma (σ) denotes SELECT and Pi (Π) denotes PROJECT.", hint_ta: "பாடம் 11 (பிரிவு 11.8.1): உறவுநிலை இயற்கணிதத்தில் SELECT கூற்றுக்கு சிக்மா (σ) சின்னம் பயன்படுகிறது.", ans: 0 },
+                    { q_en: "A tuple is also known as", q_ta: "ஒரு tuple என்பது எதைக் குறிக்கிறது?", options_en: ["(A) table", "(B) row", "(C) attribute", "(D) field"], options_ta: ["(அ) table", "(ஆ) row (வரிசை)", "(இ) attribute", "(ஈ) field"], hint_en: "TNSCERT Ch.11 (Sec 11.3): A single row in a database table is called a Tuple.", hint_ta: "பாடம் 11 (பிரிவு 11.3): அட்டவணையில் உள்ள ஒரு வரிசை (Row) 'tuple' என அழைக்கப்படுகிறது.", ans: 1 },
+                    { q_en: "Who developed ER model?", q_ta: "ER மாதிரியை முதலில் உருவாக்கியவர் யார்?", options_en: ["(A) Chen", "(B) EF Codd", "(C) Chend", "(D) Chand"], options_ta: ["(அ) Chen (சென்)", "(ஆ) EF Codd", "(இ) Chend", "(ஈ) Chand"], hint_en: "TNSCERT Ch.11 (Sec 11.4.4): Peter Chen developed the Entity-Relationship (ER) model in 1976.", hint_ta: "பாடம் 11 (பிரிவு 11.4.4): 1976-ல் Peter Chen என்பவரால் ER மாதிரி உருவாக்கப்பட்டது.", ans: 0 }
+                ]
+            },
+            {
+                unit: 12,
+                name_en: "Structured Query Language (SQL)",
+                name_ta: "வினவல் அமைப்பு மொழி (SQL)",
+                questions: [
+                    { q_en: "Which commands provide definitions for creating table structure, deleting relations, and modifying relation schemas?", q_ta: "எந்த கட்டளைகள் அட்டவணை வடிவமைப்பை உருவாக்குதல், உறவுநிலையை நீக்குதல் மற்றும் உறவுநிலை திட்ட வடிவமைப்பை மாற்றுதல் போன்ற செயற்பாடுகளுக்கான வரையறைகளை வழங்குகிறது?", options_en: ["(A) DDL", "(B) DML", "(C) DCL", "(D) DQL"], options_ta: ["(அ) DDL", "(ஆ) DML", "(இ) DCL", "(ஈ) DQL"], hint_en: "TNSCERT Ch.12 (Sec 12.4.1): DDL (Data Definition Language) includes CREATE, ALTER, DROP, TRUNCATE.", hint_ta: "பாடம் 12 (பிரிவு 12.4.1): அட்டவணை கட்டமைப்பை உருவாக்க, மாற்ற, நீக்க DDL (Data Definition Language) கட்டளைகள் பயன்படுகின்றன.", ans: 0 },
+                    { q_en: "Which command lets to change the structure of the table?", q_ta: "எந்த கட்டளை அட்டவணையின் வடிவமைப்பை மாற்றி அமைக்க அனுமதிக்கிறது?", options_en: ["(A) SELECT", "(B) ORDER BY", "(C) MODIFY", "(D) ALTER"], options_ta: ["(அ) SELECT", "(ஆ) ORDER BY", "(இ) MODIFY", "(ஈ) ALTER"], hint_en: "TNSCERT Ch.12 (Sec 12.6.2): The ALTER TABLE command adds, modifies, or drops columns in an existing table.", hint_ta: "பாடம் 12 (பிரிவு 12.6.2): அட்டவணையின் வடிவமைப்பை மாற்றியமைக்க ALTER கட்டளை பயன்படுகிறது.", ans: 3 },
+                    { q_en: "The command to delete a table is", q_ta: "அட்டவணையை நீக்க பயன்படுத்த வேண்டிய கட்டளை", options_en: ["(A) DROP", "(B) DELETE", "(C) DELETE ALL", "(D) ALTER TABLE"], options_ta: ["(அ) DROP", "(ஆ) DELETE", "(இ) DELETE ALL", "(ஈ) ALTER TABLE"], hint_en: "TNSCERT Ch.12 (Sec 12.6.4): DROP TABLE completely removes the table structure and data from the database.", hint_ta: "பாடம் 12 (பிரிவு 12.6.4): அட்டவணையை தரவுதளத்திலிருந்து முழுமையாக நீக்க DROP கட்டளை பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Queries can be generated using", q_ta: "வினவல்களை உருவாக்க பயன்படுவது", options_en: ["(A) SELECT", "(B) ORDER BY", "(C) MODIFY", "(D) ALTER"], options_ta: ["(அ) SELECT", "(ஆ) ORDER BY", "(இ) MODIFY", "(ஈ) ALTER"], hint_en: "TNSCERT Ch.12 (Sec 12.7.1): The SELECT command (DQL) is used to query and retrieve data from tables.", hint_ta: "பாடம் 12 (பிரிவு 12.7.1): தரவுதளத்திலிருந்து வினவல்களை உருவாக்கி தரவுகளைப் பெற SELECT கட்டளை பயன்படுகிறது.", ans: 0 },
+                    { q_en: "The clause used to sort data in a database", q_ta: "ஒரு தரவுத்தளத்தில் உள்ள தரவை வரிசையாக்கம் செய்ய பயன்படும் clause", options_en: ["(A) SORT BY", "(B) ORDER BY", "(C) GROUP BY", "(D) SELECT"], options_ta: ["(அ) SORT BY", "(ஆ) ORDER BY", "(இ) GROUP BY", "(ஈ) SELECT"], hint_en: "TNSCERT Ch.12 (Sec 12.7.4): ORDER BY sorts query results in ascending (ASC) or descending (DESC) order.", hint_ta: "பாடம் 12 (பிரிவு 12.7.4): தரவுகளை ஏறுவரிசை அல்லது இறங்குவரிசையில் வரிசையாக்கம் செய்ய ORDER BY பயன்படுகிறது.", ans: 1 },
+                    { q_en: "Which constraint applies a condition on a column or group of columns?", q_ta: "புலம் அல்லது புலங்களின் தொகுதிக்கு பயன்படுத்தக்கூடிய நிபந்தனையை குறிப்பது?", options_en: ["(A) Commands", "(B) Constraints", "(C) Functions", "(D) Procedures"], options_ta: ["(அ) கட்டளைகள்", "(ஆ) கட்டுப்பாடுகள் (Constraints)", "(இ) செயல்பாடுகள்", "(ஈ) வழிமுறைகள்"], hint_en: "TNSCERT Ch.12 (Sec 12.5.2): Constraints (Primary Key, Unique, Check, Default) enforce rules on table columns.", hint_ta: "பாடம் 12 (பிரிவு 12.5.2): புலங்களுக்கு நிபந்தனைகளை விதிக்க கட்டுப்பாடுகள் (Constraints) பயன்படுகின்றன.", ans: 1 },
+                    { q_en: "Which constraint uses relational and logical operators?", q_ta: "எந்த கட்டுப்பாடுகளில் ஒப்பீடு மற்றும் தருக்க செயற்குறிகளை பயன்படுத்தலாம்?", options_en: ["(A) Unique", "(B) Primary Key", "(C) Check", "(D) Default"], options_ta: ["(அ) Unique", "(ஆ) Primary Key", "(இ) Check", "(ஈ) Default"], hint_en: "TNSCERT Ch.12 (Sec 12.5.2): The CHECK constraint limits the range of values in a column using relational/logical conditions (e.g., CHECK (Marks>=0)).", hint_ta: "பாடம் 12 (பிரிவு 12.5.2): ஒப்பீடு மற்றும் தருக்க நிபந்தனைகளைக் கொண்டு மதிப்புகளைச் சரிபார்க்க Check கட்டுப்பாடு பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Which constraint is used to assign a default value for a field?", q_ta: "ஒரு புலத்தில் முன்னியல்பு மதிப்புக்களை இருத்தி வைக்கப் பயன்படும் கட்டுப்பாடு?", options_en: ["(A) Unique", "(B) Primary Key", "(C) Check", "(D) Default"], options_ta: ["(அ) Unique", "(ஆ) Primary Key", "(இ) Check", "(ஈ) Default"], hint_en: "TNSCERT Ch.12 (Sec 12.5.2): The DEFAULT constraint automatically inserts a pre-defined value when no value is specified.", hint_ta: "பாடம் 12 (பிரிவு 12.5.2): ஒரு புலத்தில் முன்னியல்பு மதிப்பை இருத்தி வைக்க Default கட்டுப்பாடு பயன்படுகிறது.", ans: 3 },
+                    { q_en: "Which keyword retains duplicate rows in output?", q_ta: "எந்த சிறப்புச்சொல் இரட்டிப்பு பதிவுகளை நீக்காமல் அட்டவணையின் ஒவ்வொரு வரிசையையும் வெளிக்காட்டும்?", options_en: ["(A) DUPLICATE IN", "(B) DISTINCT", "(C) ALL", "(D) REMOVE"], options_ta: ["(அ) DUPLICATE IN", "(ஆ) DISTINCT", "(இ) ALL", "(ஈ) REMOVE"], hint_en: "TNSCERT Ch.12 (Sec 12.7.1): DISTINCT removes duplicate rows, whereas ALL retains all rows including duplicates.", hint_ta: "பாடம் 12 (பிரிவு 12.7.1): DISTINCT இரட்டிப்பு பதிவுகளை நீக்கும்; ALL இரட்டிப்பு பதிவுகளை நீக்காமல் அனைத்தையும் காட்டும்.", ans: 2 },
+                    { q_en: "Which command deletes all records from a table and releases the space?", q_ta: "எந்த கட்டளை அட்டவணையின் அனைத்து பதிவுகளையும் நீக்கி, வடிவமைப்பை மாற்றாமல் அட்டவணைக்கென ஒதுக்கீடு செய்த இடத்தை விடுவிக்கும்?", options_en: ["(A) TRUNCATE", "(B) DROP", "(C) DELETE", "(D) DELETE ALL"], options_ta: ["(அ) TRUNCATE", "(ஆ) DROP", "(இ) DELETE", "(ஈ) DELETE ALL"], hint_en: "TNSCERT Ch.12 (Sec 12.6.3): TRUNCATE removes all rows and frees allocated space while preserving the table structure.", hint_ta: "பாடம் 12 (பிரிவு 12.6.3): அட்டவணையின் கட்டமைப்பை மாற்றாமல் அனைத்து பதிவுகளையும் நீக்கி இடத்தை விடுவிப்பது TRUNCATE.", ans: 0 }
+                ]
+            },
+            {
+                unit: 13,
+                name_en: "Python and CSV Files",
+                name_ta: "பைத்தான் மற்றும் CSV கோப்புகள்",
+                questions: [
+                    { q_en: "A CSV file is also known as a ….", q_ta: "CSV கோப்பானது பின்வருபவனவற்றுள் எவ்வாறு அழைக்கப்பட்டுள்ளது?", options_en: ["(A) Flat File", "(B) 3D File", "(C) String File", "(D) Random File"], options_ta: ["(அ) Flat File", "(ஆ) 3D File", "(இ) String File", "(ஈ) Random File"], hint_en: "TNSCERT Ch.13 (Sec 13.1): A CSV (Comma Separated Values) file is a human-readable text file also known as a Flat File.", hint_ta: "பாடம் 13 (பிரிவு 13.1): CSV கோப்பு என்பது உரை வடிவிலான Flat File என்றும் அழைக்கப்படுகிறது.", ans: 0 },
+                    { q_en: "The expansion of CRLF is", q_ta: "CRLF என்பதன் விரிவாக்கம் யாது?", options_en: ["(A) Control Return and Line Feed", "(B) Carriage Return and Form Feed", "(C) Control Router and Line Feed", "(D) Carriage Return and Line Feed"], options_ta: ["(அ) Control Return and Line Feed", "(ஆ) Carriage Return and Form Feed", "(இ) Control Router and Line Feed", "(ஈ) Carriage Return and Line Feed"], hint_en: "TNSCERT Ch.13 (Sec 13.3): CRLF stands for Carriage Return (\\r) and Line Feed (\\n), used to mark line endings.", hint_ta: "பாடம் 13 (பிரிவு 13.3): CRLF என்பதன் விரிவாக்கம் Carriage Return and Line Feed.", ans: 3 },
+                    { q_en: "Which of the following module is provided by Python to do several operations on the CSV files?", q_ta: "பின்வருபவனவற்றுள் எந்த கூறுநிலையானது (Module) CSV கோப்பினில் பல்வேறு செயல்பாடுகளை செய்ய பைத்தானால் வழங்கப்பட்டுள்ளது?", options_en: ["(A) py", "(B) xls", "(C) csv", "(D) os"], options_ta: ["(அ) py", "(ஆ) xls", "(இ) csv", "(ஈ) os"], hint_en: "TNSCERT Ch.13 (Sec 13.3): Python provides the built-in 'csv' module to read and write CSV files.", hint_ta: "பாடம் 13 (பிரிவு 13.3): CSV கோப்புகளைக் கையாள பைத்தானில் 'csv' என்ற கூறுநிலை வழங்கப்பட்டுள்ளது.", ans: 2 },
+                    { q_en: "Which of the following mode is used when dealing with non-text files like image or exe files?", q_ta: "உருவப்படம் அல்லது இயங்குநிலை கோப்பு போன்று உரை அல்லாத கோப்புகளை கையாள பின்வரும் எந்த முறைமையானது பயன்படுகிறது?", options_en: ["(A) Text mode", "(B) Binary mode", "(C) xls mode", "(D) csv mode"], options_ta: ["(அ) உரை முறைமை", "(ஆ) இருமநிலை (Binary) முறைமை", "(இ) xls முறைமை", "(ஈ) csv முறைமை"], hint_en: "TNSCERT Ch.13 (Sec 13.3.1): Binary mode ('b') is used when reading/writing non-text files like images or executables.", hint_ta: "பாடம் 13 (பிரிவு 13.3.1): உரை அல்லாத படங்கள் மற்றும் இயங்குநிலை கோப்புகளைக் கையாள இருமநிலை முறைமை (Binary mode) பயன்படுகிறது.", ans: 1 },
+                    { q_en: "The command used to skip a row in a CSV file is", q_ta: "கோப்பினில் ஒரு வரிசையை தவிர்க்க பயன்படும் கட்டளை", options_en: ["(A) next()", "(B) skip()", "(C) omit()", "(D) bounce()"], options_ta: ["(அ) next()", "(ஆ) skip()", "(இ) omit()", "(ஈ) bounce()"], hint_en: "TNSCERT Ch.13 (Sec 13.3.2): Calling next(reader_obj) advances the iterator by one row, skipping the header row.", hint_ta: "பாடம் 13 (பிரிவு 13.3.2): CSV கோப்பில் ஒரு வரிசையைத் (தலைப்பு வரிசை) தவிர்க்க next() கட்டளை பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Which of the following is a string used to terminate lines produced by writer() method of csv module?", q_ta: "பின்வருபவனவற்றுள் CSV கூறுநிலையில் writer முறையால் வழங்கப்பட்டுள்ள வரி முறிப்பான் எது?", options_en: ["(A) Line Terminator", "(B) Enter key", "(C) Form feed", "(D) Data Terminator"], options_ta: ["(அ) Line Terminator", "(ஆ) Enter Key", "(இ) Form Feed", "(ஈ) Data Terminator"], hint_en: "TNSCERT Ch.13 (Sec 13.4.3): 'lineterminator' is the string used to terminate lines produced by csv.writer() (default is '\\r\\n').", hint_ta: "பாடம் 13 (பிரிவு 13.4.3): writer() முறையில் வரிகளை முடித்து வைக்கப் பயன்படுவது Line Terminator.", ans: 0 },
+                    { q_en: "What is the output of the following program?\nimport csv\nd=csv.reader(open('city.csv'))\nnext(d)\nfor row in d: print(row)\n(If city.csv has chennai,mylapore & mumbai,andheri)", q_ta: "\"city.csv\" கோப்பில் chennai,mylapore மற்றும் mumbai,andheri இருந்தால், next(d)-க்குப் பிறகு வெளியீடு என்ன?", options_en: ["(A) chennai,mylapore", "(B) mumbai,andheri", "(C) chennai", "(D) mumbai"], options_ta: ["(அ) chennai,mylapore", "(ஆ) mumbai,andheri", "(இ) chennai", "(ஈ) mumbai"], hint_en: "TNSCERT Ch.13 (Sec 13.3.2): next(d) skips the first row ('chennai,mylapore'), so the loop prints the second row: 'mumbai,andheri'.", hint_ta: "பாடம் 13 (பிரிவு 13.3.2): next(d) முதல் வரிசையை (chennai,mylapore) தவிர்த்துவிடும்; எனவே இரண்டாவது வரிசையான mumbai,andheri வெளியாகும்.", ans: 1 },
+                    { q_en: "Which of the following creates an object which maps data to a dictionary?", q_ta: "Dictionary தரவுகளை குறிக்க இவற்றுள் எது ஒரு பொருளை உருவாக்குகின்றது?", options_en: ["(A) listreader()", "(B) reader()", "(C) tuplereader()", "(D) DictReader()"], options_ta: ["(அ) listreader()", "(ஆ) reader()", "(இ) tuplereader()", "(ஈ) DictReader()"], hint_en: "TNSCERT Ch.13 (Sec 13.3.4): csv.DictReader() reads each CSV row and maps it to an OrderedDict/dictionary.", hint_ta: "பாடம் 13 (பிரிவு 13.3.4): CSV தரவுகளை Dictionary வடிவில் படிக்க DictReader() பயன்படுகிறது.", ans: 3 },
+                    { q_en: "Making some changes in the data of the existing file or adding more data is called", q_ta: "ஏற்கனவே உள்ள கோப்பில் உள்ள தரவுகளில் சில மாற்றங்கள் செய்வதும் அல்லது மேலும் தரவை சேர்ப்பது இவ்வாறு அழைக்கலாம்", options_en: ["(A) Editing", "(B) Appending", "(C) Modification", "(D) Alteration"], options_ta: ["(அ) பதிப்பித்தல் (Editing)", "(ஆ) இறுதியில் சேர்த்தல் (Appending)", "(இ) மாற்றம் செய்தல் (Modification)", "(ஈ) திருத்துதல் (Alteration)"], hint_en: "TNSCERT Ch.13 (Sec 13.4.2): Making changes to existing file data or adding more data is termed Modification.", hint_ta: "பாடம் 13 (பிரிவு 13.4.2): ஏற்கனவே உள்ள கோப்பில் மாற்றங்கள் செய்வது அல்லது தரவு சேர்ப்பது 'மாற்றம் செய்தல்' (Modification).", ans: 2 },
+                    { q_en: "Which function frees the resources that were tied with the file?", q_ta: "கீழ்க்கண்டவற்றுள் எது கோப்புடன் இணக்கப்பட்டுள்ள வளங்களை விடுவிக்கும்?", options_en: ["(A) remove()", "(B) delete()", "(C) release()", "(D) close()"], options_ta: ["(அ) remove()", "(ஆ) delete()", "(இ) release()", "(ஈ) close()"], hint_en: "TNSCERT Ch.13 (Sec 13.3.1): Calling file.close() flushes buffers and frees system resources tied to the open file.", hint_ta: "பாடம் 13 (பிரிவு 13.3.1): கோப்புடன் இணைக்கப்பட்ட கணினி வளங்களை விடுவிக்க close() செயற்கூறு பயன்படுகிறது.", ans: 3 }
+                ]
+            },
+            {
+                unit: 14,
+                name_en: "Importing C++ Programs in Python",
+                name_ta: "பைத்தானில் C++ நிரல்களை தருவித்தல்",
+                questions: [
+                    { q_en: "Which of the following is not a scripting language?", q_ta: "பின்வருவனவற்றுள் எது Scripting மொழி அல்ல?", options_en: ["(A) JavaScript", "(B) PHP", "(C) Perl", "(D) HTML"], options_ta: ["(அ) ஜாவாஸ்கிரிப்ட்", "(ஆ) PHP", "(இ) பெர்ல்", "(ஈ) HTML"], hint_en: "TNSCERT Ch.14 (Sec 14.2): HTML is a Markup Language, not a scripting/programming language.", hint_ta: "பாடம் 14 (பிரிவு 14.2): HTML என்பது ஒரு குறியீட்டு மொழி (Markup Language); Scripting மொழி அல்ல.", ans: 3 },
+                    { q_en: "Importing C++ program in a Python program is called", q_ta: "பைத்தான் நிரலில் C++ நிரலை தருவித்தல் எவ்வாறு அழைக்கப்படுகிறது?", options_en: ["(A) wrapping", "(B) Downloading", "(C) Interconnecting", "(D) Parsing"], options_ta: ["(அ) wrapping", "(ஆ) பதிவிறக்கம் செய்தல்", "(இ) இணைத்தல்", "(ஈ) பிரித்தல்"], hint_en: "TNSCERT Ch.14 (Sec 14.3): Creating a Python interface around C/C++ code so Python can call it is called Wrapping.", hint_ta: "பாடம் 14 (பிரிவு 14.3): பைத்தான் நிரலில் C++ நிரலை தருவித்துப் பயன்படுத்துவது 'Wrapping' என அழைக்கப்படுகிறது.", ans: 0 },
+                    { q_en: "The expansion of API is", q_ta: "API ன் விரிவாக்கம் என்ன?", options_en: ["(A) Application Programming Interpreter", "(B) Application Programming Interface", "(C) Application Performing Interface", "(D) Application Programming Interlink"], options_ta: ["(அ) Application Programming Interpreter", "(ஆ) Application Programming Interface", "(இ) Application Performing Interface", "(ஈ) Application Programming Interlink"], hint_en: "TNSCERT Ch.14 (Sec 14.3): API stands for Application Programming Interface.", hint_ta: "பாடம் 14 (பிரிவு 14.3): API என்பதன் விரிவாக்கம் Application Programming Interface.", ans: 1 },
+                    { q_en: "A framework for interfacing Python and C++ is", q_ta: "பைத்தான் மற்றும் C++ நிரல்களை இடைமுகப்படுத்துவதற்கான கட்டமைப்பு எது?", options_en: ["(A) Ctypes", "(B) SWIG", "(C) Cython", "(D) Boost"], options_ta: ["(அ) Ctypes", "(ஆ) SWIG", "(இ) Cython", "(ஈ) Boost"], hint_en: "TNSCERT Ch.14 (Sec 14.3): Boost.Python is a framework for interfacing Python and C++.", hint_ta: "பாடம் 14 (பிரிவு 14.3): பைத்தான் மற்றும் C++ நிரல்களை இடைமுகப்படுத்தும் கட்டமைப்பு (Framework) Boost ஆகும்.", ans: 3 },
+                    { q_en: "Which of the following is a software design technique to split your code into separate parts?", q_ta: "பின்வருவனவற்றுள் எது உங்கள் குறிமுறையை தனித்தனி பகுதிகளாக பிரித்தெடுப்பதற்கான மென்பொருள் வடிவமைப்பு தொழில்நுட்பம்?", options_en: ["(A) Object oriented Programming", "(B) Modular programming", "(C) Low Level Programming", "(D) Procedure oriented Programming"], options_ta: ["(அ) பொருள்நோக்கு நிரலாக்கம்", "(ஆ) கூறுநிலை (Modular) நிரலாக்கம்", "(இ) குறைந்த நிலை நிரலாக்கம்", "(ஈ) செயல்முறைநோக்கு நிரலாக்கம்"], hint_en: "TNSCERT Ch.14 (Sec 14.4): Modular programming splits code into separate, independent modules.", hint_ta: "பாடம் 14 (பிரிவு 14.4): குறிமுறையை தனித்தனி பகுதிகளாகப் பிரித்தெடுக்கும் தொழில்நுட்பம் கூறுநிலை (Modular) நிரலாக்கம்.", ans: 1 },
+                    { q_en: "The module which allows you to interface with the Windows operating system is", q_ta: "நீங்கள் விண்டோஸ் இயக்க முறைமையுடன் தொடர்பு கொள்ள எந்த கூறுநிலை அனுமதிக்கிறது?", options_en: ["(A) OS module", "(B) sys module", "(C) csv module", "(D) getopt module"], options_ta: ["(அ) OS கூறுநிலை", "(ஆ) sys கூறுநிலை", "(இ) csv கூறுநிலை", "(ஈ) getopt கூறுநிலை"], hint_en: "TNSCERT Ch.14 (Sec 14.5.2): The 'os' module provides functions (like os.system()) to interact with the Windows OS.", hint_ta: "பாடம் 14 (பிரிவு 14.5.2): விண்டோஸ் இயக்க அமைப்புடன் தொடர்பு கொள்ள 'OS கூறுநிலை' (os module) பயன்படுகிறது.", ans: 0 },
+                    { q_en: "getopt() will return an empty array if there is no error in splitting strings to", q_ta: "சரங்களை எந்த மாதிரியாக பிரிக்கும் பொழுது பிழையின்றி வெற்று அணியை திருப்பி அனுப்பும்?", options_en: ["(A) argv variable", "(B) opt variable", "(C) args variable", "(D) ifile variable"], options_ta: ["(அ) argv மாறி", "(ஆ) opt மாறி", "(இ) args மாறி", "(ஈ) ifile மாறி"], hint_en: "TNSCERT Ch.14 (Sec 14.5.3): opts, args = getopt.getopt(...) returns an empty 'args' list if there is no error in splitting options.", hint_ta: "பாடம் 14 (பிரிவு 14.5.3): பிழையின்றி சரங்களைப் பிரிக்கும்போது 'args மாறி' வெற்று அணியைத் திருப்பி அனுப்பும்.", ans: 2 },
+                    { q_en: "Identify the function call statement in the following snippet:\nif __name__ =='__main__':\n  main(sys.argv[1:])", q_ta: "பின்வரும் நிரல் பகுதியில் உள்ள செயற்கூறு அழைப்பு கூற்றை அடையாளம் காண்க:\nif __name__ =='__main__':\n  main(sys.argv[1:])", options_en: ["(A) main(sys.argv[1:])", "(B) __name__", "(C) __main__", "(D) argv"], options_ta: ["(அ) main(sys.argv[1:])", "(ஆ) __name__", "(இ) __main__", "(ஈ) argv"], hint_en: "TNSCERT Ch.14 (Sec 14.6): main(sys.argv[1:]) invokes the main() function passing command-line arguments.", hint_ta: "பாடம் 14 (பிரிவு 14.6): இதில் main(sys.argv[1:]) என்பதே செயற்கூறு அழைப்பு கூற்றாகும்.", ans: 0 },
+                    { q_en: "Which of the following can be used for processing text, numbers, images, and scientific data?", q_ta: "கீழ்க்கண்டவற்றுள் எது உரை, எண்கள், படங்கள் மற்றும் அறிவியல் சார்ந்த தரவுகளை செயலாக்கப் பயன்படும்?", options_en: ["(A) HTML", "(B) C", "(C) C++", "(D) PYTHON"], options_ta: ["(அ) HTML", "(ஆ) C", "(இ) C++", "(ஈ) PYTHON"], hint_en: "TNSCERT Ch.14 (Sec 14.1): Python has rich libraries for processing text, numbers, images, and scientific data.", hint_ta: "பாடம் 14 (பிரிவு 14.1): உரை, எண்கள், படங்கள் மற்றும் அறிவியல் தரவுகளைச் செயலாக்க PYTHON பயன்படுகிறது.", ans: 3 },
+                    { q_en: "What does __name__ contains?", q_ta: "__name__ இது எதனை கொண்டுள்ளது?", options_en: ["(A) c++ filename", "(B) main name", "(C) python filename", "(D) os module name"], options_ta: ["(அ) c++ filename", "(ஆ) main name", "(இ) python filename", "(ஈ) os module name"], hint_en: "TNSCERT Ch.14 (Sec 14.6): __name__ is a built-in special variable that stores the name of the current Python file/module.", hint_ta: "பாடம் 14 (பிரிவு 14.6): __name__ என்ற சிறப்பு மாறி நடப்பு பைத்தான் கோப்பின் பெயரை (python filename) கொண்டிருக்கும்.", ans: 2 }
+                ]
+            },
+            {
+                unit: 15,
+                name_en: "Data Manipulation Through SQL",
+                name_ta: "SQL மூலம் தரவுகளைக் கையாளுதல்",
+                questions: [
+                    { q_en: "Which of the following is an organized collection of data?", q_ta: "பின்வரும் எது ஒருங்கிணைக்கப்பட்ட தரவுகளின் தொகுப்பாகும்?", options_en: ["(A) Database", "(B) DBMS", "(C) Information", "(D) Records"], options_ta: ["(அ) தரவுத்தளம் (Database)", "(ஆ) DBMS", "(இ) தகவல்", "(ஈ) பதிவுகள்"], hint_en: "TNSCERT Ch.15 (Sec 15.1): A Database is an organized collection of interrelated data.", hint_ta: "பாடம் 15 (பிரிவு 15.1): ஒருங்கிணைக்கப்பட்ட தரவுகளின் தொகுப்பு தரவுத்தளம் (Database) எனப்படும்.", ans: 0 },
+                    { q_en: "SQLite falls under which database system?", q_ta: "SQLite எந்த தரவுத்தள அமைப்பைச் சேர்ந்தது?", options_en: ["(A) Flat file database system", "(B) Relational Database system", "(C) Hierarchical database system", "(D) Object oriented Database system"], options_ta: ["(அ) ஒற்றைக் கோப்பு தரவுத்தளம்", "(ஆ) உறவுநிலை தரவுத்தளம்", "(இ) படிநிலை தரவுத்தளம்", "(ஈ) பொருள்நோக்கு தரவுத்தளம்"], hint_en: "TNSCERT Ch.15 (Sec 15.2): SQLite is a simple relational database system that saves its data in regular flat files.", hint_ta: "பாடம் 15 (பிரிவு 15.2): SQLite என்பது உறவுநிலை தரவுத்தள அமைப்பைச் (Relational Database system) சேர்ந்தது.", ans: 1 },
+                    { q_en: "Which of the following is a control structure used to traverse and fetch the records of the database?", q_ta: "பின்வரும் எந்த கட்டுப்பாட்டு அமைப்பு தரவுத்தளத்திலிருந்து பதிவுகளைப் பெற்றுத்தர பயன்படுகிறது?", options_en: ["(A) Pointer", "(B) Key", "(C) Cursor", "(D) Insertion point"], options_ta: ["(அ) சுட்டு", "(ஆ) திறவுகோல்", "(இ) Cursor", "(ஈ) செருகும் புள்ளி"], hint_en: "TNSCERT Ch.15 (Sec 15.2.1): A Cursor object is created via connection.cursor() to traverse and fetch records from the database.", hint_ta: "பாடம் 15 (பிரிவு 15.2.1): தரவுத்தள பதிவுகளை அணுகவும் பெற்றுத்தரவும் Cursor என்ற கட்டுப்பாட்டு அமைப்பு பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Any changes made in the values of the record should be saved by the command", q_ta: "பதிவுகளில் உள்ள மதிப்புகளில் செய்யப்படும் மாற்றங்களை சேமிக்கப் பயன்படும் கட்டளை எது?", options_en: ["(A) Save", "(B) Save As", "(C) Commit", "(D) Oblige"], options_ta: ["(அ) Save", "(ஆ) Save As", "(இ) Commit", "(ஈ) Oblige"], hint_en: "TNSCERT Ch.15 (Sec 15.3): connection.commit() permanently saves any changes made to the database.", hint_ta: "பாடம் 15 (பிரிவு 15.3): தரவுத்தளத்தில் செய்த மாற்றங்களை நிரந்தரமாகச் சேமிக்க Commit கட்டளை பயன்படுகிறது.", ans: 2 },
+                    { q_en: "Which of the following executes the SQL command to perform some action?", q_ta: "சில செயல்பாடுகளை SQL கட்டளைகள் செய்வதற்கு பின்வரும் எது இயக்கப்படுகிறது?", options_en: ["(A) Execute()", "(B) Key()", "(C) Cursor()", "(D) run()"], options_ta: ["(அ) execute()", "(ஆ) key()", "(இ) cursor()", "(ஈ) run()"], hint_en: "TNSCERT Ch.15 (Sec 15.2.2): cursor.execute(\"SQL QUERY\") runs the SQL command on the SQLite database.", hint_ta: "பாடம் 15 (பிரிவு 15.2.2): SQL கட்டளைகளை இயக்க execute() செயற்கூறு பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Which of the following function retrieves the average of a selected column of rows in a table?", q_ta: "பின்வரும் எந்த சார்பு அட்டவணையிலுள்ள தேர்ந்தெடுக்கப்பட்ட புலத்தின் பதிவுகளின் சராசரியைக் கொடுக்கிறது?", options_en: ["(A) Add()", "(B) SUM()", "(C) AVG()", "(D) AVERAGE()"], options_ta: ["(அ) Add()", "(ஆ) SUM()", "(இ) AVG()", "(ஈ) AVERAGE()"], hint_en: "TNSCERT Ch.15 (Sec 15.6.3): SQL aggregate function AVG() computes the average value of a numeric column.", hint_ta: "பாடம் 15 (பிரிவு 15.6.3): தேர்ந்தெடுக்கப்பட்ட புலத்தின் சராசரியைக் கணக்கிட AVG() சார்பு பயன்படுகிறது.", ans: 2 },
+                    { q_en: "The function that returns the largest value of the selected column is", q_ta: "எந்த செயற்கூறு தேர்ந்தெடுக்கப்பட்ட புலத்தின் பெரிய மதிப்பைத் திருப்பி அனுப்பும்?", options_en: ["(A) MAX()", "(B) LARGE()", "(C) HIGH()", "(D) MAXIMUM()"], options_ta: ["(அ) MAX()", "(ஆ) LARGE()", "(இ) HIGH()", "(ஈ) MAXIMUM()"], hint_en: "TNSCERT Ch.15 (Sec 15.6.4): MAX() returns the largest value, while MIN() returns the smallest value.", hint_ta: "பாடம் 15 (பிரிவு 15.6.4): ஒரு புலத்தில் உள்ள மிகப்பெரிய மதிப்பைத் திருப்பி அனுப்ப MAX() பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Which of the following is called the master table?", q_ta: "பின்வரும் எது முதன்மை அட்டவணை?", options_en: ["(A) sqlite_master", "(B) sql_master", "(C) main_master", "(D) master_main"], options_ta: ["(அ) sqlite_master", "(ஆ) sql_master", "(இ) main_master", "(ஈ) master_main"], hint_en: "TNSCERT Ch.15 (Sec 15.5): Every SQLite database has a built-in master table named 'sqlite_master' storing schema info.", hint_ta: "பாடம் 15 (பிரிவு 15.5): SQLite தரவுத்தளத்தில் உள்ள முதன்மை அட்டவணை 'sqlite_master' ஆகும்.", ans: 0 },
+                    { q_en: "The most commonly used statement in SQL is", q_ta: "SQL-ல் மிகவும் பொதுவாக பயன்படுத்தப்படும் கூற்று எது?", options_en: ["(A) cursor", "(B) select", "(C) execute", "(D) commit"], options_ta: ["(அ) cursor", "(ஆ) select", "(இ) execute", "(ஈ) commit"], hint_en: "TNSCERT Ch.15 (Sec 15.4): SELECT is the most commonly used SQL statement to fetch records.", hint_ta: "பாடம் 15 (பிரிவு 15.4): SQL-ல் மிகவும் பொதுவாகப் பயன்படுத்தப்படும் கூற்று 'select' ஆகும்.", ans: 1 },
+                    { q_en: "Which of the following keyword avoid the duplicate?", q_ta: "பின்வரும் எந்த சிறப்பு சொல் நகல்களைத் தவிர்க்கும்?", options_en: ["(A) Distinct", "(B) Remove", "(C) Where", "(D) GroupBy"], options_ta: ["(அ) Distinct", "(ஆ) Remove", "(இ) Where", "(ஈ) GroupBy"], hint_en: "TNSCERT Ch.15 (Sec 15.4.2): SELECT DISTINCT column_name avoids duplicate values in the output.", hint_ta: "பாடம் 15 (பிரிவு 15.4.2): வெளியீட்டில் நகல்களைத் (Duplicates) தவிர்க்க 'Distinct' சிறப்புச்சொல் பயன்படுகிறது.", ans: 0 }
+                ]
+            },
+            {
+                unit: 16,
+                name_en: "Data Visualization Using Pyplot",
+                name_ta: "தரவுக் காட்சிப்படுத்துதல் (PYPLOT)",
+                questions: [
+                    { q_en: "Which is a python package used for 2D graphics?", q_ta: "2D வரைபடத்தை உருவாக்க பயன்படும் பைத்தான் தொகுப்பு எது?", options_en: ["(A) matplotlib.pyplot", "(B) matplotlib.pip", "(C) matplotlib.numpy", "(D) matplotlib.plt"], options_ta: ["(அ) matplotlib.pyplot", "(ஆ) matplotlib.pip", "(இ) matplotlib.numpy", "(ஈ) matplotlib.plt"], hint_en: "TNSCERT Ch.16 (Sec 16.2): 'matplotlib.pyplot' is a collection of command style functions used for 2D plotting.", hint_ta: "பாடம் 16 (பிரிவு 16.2): 2D வரைபடங்களை உருவாக்க 'matplotlib.pyplot' தொகுப்பு பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Identify the package manager for Python packages, or modules.", q_ta: "பைத்தான் தொகுதிகளை அல்லது கூறுநிலைகளை (Package manager) பயன்படுத்தும் பயன்பாட்டை தேர்ந்தெடு.", options_en: ["(A) Matplotlib", "(B) PIP", "(C) plt.show()", "(D) python package"], options_ta: ["(அ) Matplotlib", "(ஆ) PIP", "(இ) plt.show()", "(ஈ) பைத்தான் தொகுப்பு"], hint_en: "TNSCERT Ch.16 (Sec 16.2.1): PIP is the standard package manager used to install Python libraries like Matplotlib.", hint_ta: "பாடம் 16 (பிரிவு 16.2.1): பைத்தான் தொகுப்புகளை நிறுவவும் நிர்வகிக்கவும் PIP பயன்படுகிறது.", ans: 1 },
+                    { q_en: "Which of the following feature is used to represent data and information graphically?", q_ta: "பின்வரும் எந்த வசதி தரவுகள் மற்றும் தகவல்களை படங்களாக வழங்கப் பயன்படுகிறது?", options_en: ["(A) Data List", "(B) Data Tuple", "(C) Classes and Objects", "(D) Data Visualization"], options_ta: ["(அ) தரவு லிஸ்ட்", "(ஆ) தரவு டூயூப்புள்", "(இ) இனக்குழுக்கள் மற்றும் பொருள்கள்", "(ஈ) தரவு காட்சிப்படுத்துதல்"], hint_en: "TNSCERT Ch.16 (Sec 16.1): Data Visualization is the graphical representation of information and data using charts/graphs.", hint_ta: "பாடம் 16 (பிரிவு 16.1): தரவுகள் மற்றும் தகவல்களை வரைபடங்களாகக் காட்டுவது 'தரவு காட்சிப்படுத்துதல்' (Data Visualization).", ans: 3 },
+                    { q_en: "________ is a collection of resources assembled to create a single unified visual display.", q_ta: "________ என்பது அனைத்து வளங்களையும் ஒன்றுபட்ட ஒற்றை காட்சி திரையில் காண்பிக்க பயன்படுகிறது.", options_en: ["(A) Interface", "(B) Dashboard", "(C) Objects", "(D) Graphics"], options_ta: ["(அ) இடைமுகம்", "(ஆ) டேஷ்போர்ட் (Dashboard)", "(இ) பொருள்கள்", "(ஈ) வரைகலை"], hint_en: "TNSCERT Ch.16 (Sec 16.1.2): A Dashboard is a collection of visual resources assembled into a single unified display.", hint_ta: "பாடம் 16 (பிரிவு 16.1.2): அனைத்து வளங்களையும் ஒரே காட்சித் திரையில் ஒருங்கிணைத்துக் காட்டுவது டேஷ்போர்ட் (Dashboard).", ans: 1 },
+                    { q_en: "Which of the following module should be imported to visualize data and information in Python?", q_ta: "பைத்தானில் தரவு மற்றும் தகவல்களை காட்சிப்படுத்த பின்வரும் எந்த கூறுநிலையை தருவிக்க வேண்டும்?", options_en: ["(A) csv", "(B) getopt", "(C) mysql", "(D) matplotlib"], options_ta: ["(அ) csv", "(ஆ) getopt", "(இ) mysql", "(ஈ) matplotlib"], hint_en: "TNSCERT Ch.16 (Sec 16.2): 'import matplotlib.pyplot as plt' imports the Matplotlib visualization module.", hint_ta: "பாடம் 16 (பிரிவு 16.2): தரவுகளைக் காட்சிப்படுத்த 'matplotlib' கூறுநிலையை தருவிக்க வேண்டும்.", ans: 3 },
+                    { q_en: "________ is a type of chart which displays information as a series of data points connected by straight line segments.", q_ta: "________ என்பது தகவல்களை, தரவு புள்ளிகளின் தொடரை நேர்கோட்டில் இணைப்பதன் மூலம் காட்டுகிறது.", options_en: ["(A) Line chart", "(B) Pie chart", "(C) Bar chart", "(D) All the above"], options_ta: ["(அ) கோட்டு விளக்கப்படம் (Line chart)", "(ஆ) வட்ட விளக்கப்படம்", "(இ) பட்டை விளக்கப்படம்", "(ஈ) அனைத்தும்"], hint_en: "TNSCERT Ch.16 (Sec 16.3.1): A Line Chart connects a series of data points (markers) with straight line segments.", hint_ta: "பாடம் 16 (பிரிவு 16.3.1): தரவுப் புள்ளிகளை நேர்கோடுகளால் இணைத்துக் காட்டுவது கோட்டு விளக்கப்படம் (Line chart).", ans: 0 },
+                    { q_en: "Read the code:\nimport matplotlib.pyplot as plt\nplt.plot(3,2)\nplt.show()\nIdentify the output for the above coding.", q_ta: "பின்வரும் குறியீட்டை படிக்கவும்:\nimport matplotlib.pyplot as plt\nplt.plot(3,2)\nplt.show()\nமேலே காணும் குறியீட்டின் வெளியீட்டைக் கண்டறியவும்.", options_en: ["(A) Point plot at (3,2)", "(B) Line chart", "(C) Bar chart", "(D) Pie chart"], options_ta: ["(அ) (3,2) என்ற புள்ளி வரைபடம்", "(ஆ) கோட்டு வரைபடம்", "(இ) பட்டை வரைபடம்", "(ஈ) வட்ட வரைபடம்"], hint_en: "TNSCERT Ch.16 (Sec 16.2.2): Passing a single coordinate pair plt.plot(3,2) plots a single point at x=3, y=2.", hint_ta: "பாடம் 16 (பிரிவு 16.2.2): plt.plot(3,2) என்பது x=3, y=2 என்ற ஒற்றைப் புள்ளி வரைபடத்தை உருவாக்கும்.", ans: 0 },
+                    { q_en: "Identify the right type of chart using the following hints:\nHint 1: This chart is often used to visualize a trend in data over intervals of time.\nHint 2: The line in this type of chart is often drawn chronologically.", q_ta: "பின்வரும் குறிப்புகளைப் படித்து தெளிவான விளக்கப்படத்தை கண்டறியவும்:\nகுறிப்பு 1: இந்த விளக்கப்படம் கால இடைவெளியைக் காட்டிலும் தரவுகளின் மாற்றத்தை காட்சிப்படுத்தும்.\nகுறிப்பு 2: இவ்வகை விளக்கப்படத்தில் காலவரிசைப்படி கோடுகள் இணைக்கப்பட்டிருக்கும்.", options_en: ["(A) Line chart", "(B) Bar chart", "(C) Pie chart", "(D) Scatter plot"], options_ta: ["(அ) Line chart (கோட்டு வரைபடம்)", "(ஆ) Bar chart (பட்டை வரைபடம்)", "(இ) Pie chart (வட்ட வரைபடம்)", "(ஈ) Scatter plot"], hint_en: "TNSCERT Ch.16 (Sec 16.3.1): Line charts are specifically used to show trends chronologically over time intervals.", hint_ta: "பாடம் 16 (பிரிவு 16.3.1): காலவரிசைப்படி தரவுகளின் போக்கைக் காட்ட Line chart பயன்படுகிறது.", ans: 0 },
+                    { q_en: "Read the statements given below. Identify the right option from the following for pie chart.\nStatement A: To make a pie chart with Matplotlib, we can use the plt.pie() function.\nStatement B: The autopct parameter allows us to display the percentage value using the Python string formatting.", q_ta: "பின்வரும் கூற்றை படித்து, வட்ட வரைபடத்திற்காக சரியான தேர்வை தேர்ந்தெடுக்கவும்:\nகூற்று A: plt.pie() பயன்படுத்தி Matplotlib-ல் வட்ட வரைபடம் வரையலாம்.\nகூற்று B: autopct அளபுரு பைத்தான் சரம் வடிவமைப்பை பயன்படுத்தி மதிப்பை சதவீதத்தில் காட்டும்.", options_en: ["(A) Statement A is correct", "(B) Statement B is correct", "(C) Both the statements are correct", "(D) Both the statements are wrong"], options_ta: ["(அ) கூற்று A சரி", "(ஆ) கூற்று B சரி", "(இ) இரு கூற்றும் சரி", "(ஈ) இரு கூற்றும் தவறு"], hint_en: "TNSCERT Ch.16 (Sec 16.3.3): Both plt.pie() and the autopct='%1.1f%%' parameter are valid features of Matplotlib pie charts.", hint_ta: "பாடம் 16 (பிரிவு 16.3.3): வட்ட வரைபடத்திற்கு plt.pie() செயற்கூறும், சதவீதம் காட்ட autopct அளபுருவும் பயன்படுவதால் இரு கூற்றும் சரி.", ans: 2 },
+                    { q_en: "Which chart always has uniform width bars?", q_ta: "எந்த வரைபடத்தில் எப்போதும் அகலம் ஒரே மாதிரியானதாக இருக்கும்?", options_en: ["(A) Line chart", "(B) Pie chart", "(C) Bar chart", "(D) Histogram"], options_ta: ["(அ) வரி வரைபடம்", "(ஆ) வட்ட வரைபடம்", "(இ) பட்டை வரைபடம் (Bar chart)", "(ஈ) ஹிஸ்டோகிராம்"], hint_en: "TNSCERT Ch.16 (Sec 16.3.2): A Bar chart shows comparisons among discrete categories using bars of uniform width.", hint_ta: "பாடம் 16 (பிரிவு 16.3.2): எப்போதும் ஒரே சீரான அகலமுடைய பட்டைகளைக் கொண்டது பட்டை வரைபடம் (Bar chart).", ans: 2 }
+                ]
+            }
+        ];
+
+        // State Variables
+        let currentLang = 'en'; // 'en' or 'ta'
+        let activeQuestions = [];
+        let currentIdx = 0;
+        let currentModeObj = { type: 'all' };
+        let sessionScore = 0;
+        let sessionAnsweredMap = {}; // stores { idx: { selectedOriginalIdx, isCorrect } }
+        let chocolates = 0;
+        let solvedSet = new Set();
+        let brightnessState = 0; // 0: Dark, 1: Light, 2: Warm High Brightness
+
+        window.onload = () => {
+            const saved = JSON.parse(localStorage.getItem('cs_student_info') || '{}');
+            if(saved.name) document.getElementById('st-name').value = saved.name;
+            if(saved.school) document.getElementById('st-school').value = saved.school;
+            if(saved.cls) document.getElementById('st-class').value = saved.cls;
+            if(saved.sec) document.getElementById('st-sec').value = saved.sec;
+
+            chocolates = parseInt(localStorage.getItem('cs_chocolates') || '0');
+            document.getElementById('choco-count').innerText = chocolates;
+
+            const savedSolved = JSON.parse(localStorage.getItem('cs_solved_list') || '[]');
+            solvedSet = new Set(savedSolved);
+            updateProgressUI();
+            checkStudentDetailsFilled();
+        };
+
+        function showToast(msgEn, msgTa) {
+            const toast = document.getElementById('dashboard-toast');
+            toast.innerText = currentLang === 'ta' ? msgTa : msgEn;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3200);
+        }
+
+        function autoSaveStudent() {
+            const data = {
+                name: document.getElementById('st-name').value,
+                school: document.getElementById('st-school').value,
+                cls: document.getElementById('st-class').value,
+                sec: document.getElementById('st-sec').value
+            };
+            localStorage.setItem('cs_student_info', JSON.stringify(data));
+            checkStudentDetailsFilled();
+        }
+
+        function checkStudentDetailsFilled() {
+            const name = document.getElementById('st-name').value.trim();
+            const school = document.getElementById('st-school').value.trim();
+            const isFilled = (name !== "" && school !== "");
+            if (isFilled) {
+                document.getElementById('dashboard-toast').style.display = 'none';
+            }
+            return isFilled;
+        }
+
+        // Language Switcher (Tamil / English) - Updates Dashboard, Lessons, AND Active Quiz immediately!
+        function toggleLanguage() {
+            currentLang = (currentLang === 'en') ? 'ta' : 'en';
+            document.getElementById('lang-btn').innerText = (currentLang === 'en') ? "தமிழ்" : "English";
+            updateUIText();
+            updateProgressUI();
+
+            if (document.getElementById('lessons-selection-view').style.display === 'block') {
+                renderLessonsList();
+            }
+            if (document.getElementById('quiz-view').style.display === 'block') {
+                renderCurrentQuestion(false); // Re-render active question & options in Tamil/English immediately!
+            }
+            if (document.getElementById('score-view').style.display === 'block') {
+                showFinalScore();
+            }
+        }
+
+        function updateUIText() {
+            if (currentLang === 'ta') {
+                document.getElementById('ui-teacher-name').innerText = "தனசேகரன் — கணினி ஆசிரியர்";
+                document.getElementById('ui-sub-title').innerText = "12-ஆம் வகுப்பு கணினி அறிவியல் • 160 புத்தக ஒரு மதிப்பெண் வினாக்கள்";
+                document.getElementById('banner-badge').innerText = "🎯 தமிழ்நாடு மாநிலப் பாடம் • 160 புத்தக வினாக்கள்";
+                document.getElementById('banner-title').innerText = "கணினி அறிவியல் வினாடி வினா விளையாடி சாக்லேட் வெல்லுங்கள்!";
+                document.getElementById('banner-desc').innerText = "பாடங்களைத் தேர்ந்தெடுக்க உங்கள் விவரங்களை கீழே உள்ள கட்டத்தில் நிரப்பவும்.";
+                document.getElementById('student-details-title').innerText = "🎓 மாணவர் விவரங்கள்";
+                document.getElementById('saved-status-tag').innerText = "✓ சேமிக்கப்பட்டது";
+                document.getElementById('lbl-name').innerText = "மாணவர் பெயர் *";
+                document.getElementById('lbl-school').innerText = "பள்ளியின் பெயர் *";
+                document.getElementById('lbl-class').innerText = "வகுப்பு";
+                document.getElementById('lbl-sec').innerText = "பிரிவு (Section)";
+                document.getElementById('proceed-lessons-btn').innerText = "பாடங்களைத் தேர்ந்தெடுக்க செல்லவும் ➔";
+                document.getElementById('modes-title').innerText = "🎮 விளையாட்டு முறையைத் தேர்ந்தெடுக்கவும்";
+                document.getElementById('mode-all-title').innerText = "அனைத்து 160 புத்தக வினாக்கள் (பயிற்சி)";
+                document.getElementById('mode-all-desc').innerText = "TNSCERT 12ஆம் வகுப்பு கணினி அறிவியல் புத்தக வினாக்கள், குறிப்புகள் & குரல் வசதியுடன்";
+                document.getElementById('mode-quick-title').innerText = "விரைவு சவால் (10 வினாக்கள்)";
+                document.getElementById('mode-quick-desc').innerText = "ரேண்டம் 10 வினாக்கள் + உடனடி சாக்லேட் பரிசுகள்";
+                document.getElementById('mode-mega-title').innerText = "மெகா சவால் (20 வினாக்கள்)";
+                document.getElementById('mode-mega-desc').innerText = "ரேண்டம் 20 வினாக்கள் + ஸ்டார் & சாக்லேட் பரிசு மழை";
+                document.getElementById('lessons-heading-txt').innerText = "📚 பாடத்தைத் தேர்ந்தெடுக்கவும்";
+                document.getElementById('sub-home-btn').innerText = "🏠 முகப்பு";
+                document.getElementById('quiz-scorecard-btn').innerText = "📊 மதிப்பெண் அட்டை";
+                document.getElementById('read-aloud-btn').innerText = "🔊 வாசிக்க";
+                document.getElementById('hint-toggle-btn').innerText = "💡 குறிப்பு (Hint)";
+                document.getElementById('hint-box-label').innerText = "📘 TNSCERT பாடப்புத்தகக் குறிப்பு:";
+                document.getElementById('prev-btn').innerText = "⬅ முந்தையது";
+                document.getElementById('resume-quiz-btn').innerText = "⬅ வினாடி வினாவிற்குத் திரும்பு";
+                document.getElementById('score-home-btn').innerText = "🏠 முகப்பு";
+            } else {
+                document.getElementById('ui-teacher-name').innerText = "DHANASEKARAN — Computer Teacher";
+                document.getElementById('ui-sub-title').innerText = "12th Computer Science • 160 Book Back 1-Marks";
+                document.getElementById('banner-badge').innerText = "🎯 Tamil Nadu State Board • 160 Book-Back 1-Marks";
+                document.getElementById('banner-title').innerText = "Play Computer Science Quiz & Win Chocolates!";
+                document.getElementById('banner-desc').innerText = "Fill in your details below to unlock lessons and start playing.";
+                document.getElementById('student-details-title').innerText = "🎓 Student Details";
+                document.getElementById('saved-status-tag').innerText = "✓ Auto Saved";
+                document.getElementById('lbl-name').innerText = "Student Name *";
+                document.getElementById('lbl-school').innerText = "School Name *";
+                document.getElementById('lbl-class').innerText = "Class";
+                document.getElementById('lbl-sec').innerText = "Section";
+                document.getElementById('proceed-lessons-btn').innerText = "Proceed to Lessons ➔";
+                document.getElementById('modes-title').innerText = "🎮 Select Game Mode";
+                document.getElementById('mode-all-title').innerText = "All 160 Book-Back Questions (Practice)";
+                document.getElementById('mode-all-desc').innerText = "Complete TNSCERT Class 12 CS Book-Back questions with Hints & Voice Reader";
+                document.getElementById('mode-quick-title').innerText = "Quick Challenge (10 Questions)";
+                document.getElementById('mode-quick-desc').innerText = "Random 10 Book-Back questions + Instant Chocolate Rewards";
+                document.getElementById('mode-mega-title').innerText = "Mega Challenge (20 Questions)";
+                document.getElementById('mode-mega-desc').innerText = "Random 20 Book-Back questions + Star & Chocolate Shower";
+                document.getElementById('lessons-heading-txt').innerText = "📚 Select a Lesson";
+                document.getElementById('sub-home-btn').innerText = "🏠 Home";
+                document.getElementById('quiz-scorecard-btn').innerText = "📊 Scorecard";
+                document.getElementById('read-aloud-btn').innerText = "🔊 Read Aloud";
+                document.getElementById('hint-toggle-btn').innerText = "💡 Hint / குறிப்பு";
+                document.getElementById('hint-box-label').innerText = "📘 TNSCERT Textbook Hint:";
+                document.getElementById('prev-btn').innerText = "⬅ Previous";
+                document.getElementById('resume-quiz-btn').innerText = "⬅ Back to Quiz";
+                document.getElementById('score-home-btn').innerText = "🏠 Dashboard";
+            }
+        }
+
+        function goToLessonsView() {
+            if (!checkStudentDetailsFilled()) {
+                showToast(
+                    "⚠️ Please fill in Student Name and School Name first!",
+                    "⚠️ தயவுசெய்து மாணவர் பெயர் மற்றும் பள்ளிப் பெயரை முதலில் உள்ளிடவும்!"
+                );
+                return;
+            }
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('score-view').style.display = 'none';
+            document.getElementById('lessons-selection-view').style.display = 'block';
+            renderLessonsList();
+        }
+
+        function goToDashboard() {
+            window.speechSynthesis.cancel();
+            document.getElementById('lessons-selection-view').style.display = 'none';
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('score-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+        }
+
+        function renderLessonsList() {
+            const container = document.getElementById('lessons-grid-container');
+            container.innerHTML = '';
+            
+            csUnits.forEach(u => {
+                const lessonName = (currentLang === 'ta') ? u.name_ta : u.name_en;
+                let solvedInUnit = 0;
+                u.questions.forEach((_, idx) => {
+                    if (solvedSet.has(`u${u.unit}_q${idx}`)) solvedInUnit++;
+                });
+
+                const card = document.createElement('div');
+                card.className = 'lesson-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="lesson-card-top">
+                            <span class="lesson-badge">${currentLang === 'ta' ? 'பாடம்' : 'Unit'} ${u.unit}</span>
+                            <span class="lesson-q-badge">${solvedInUnit}/${u.questions.length} ${currentLang === 'ta' ? 'தீர்வு' : 'Solved'}</span>
+                        </div>
+                        <div class="lesson-title">${lessonName}</div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.78rem; color: #818cf8; font-weight: 700; text-align: right;">
+                        ${currentLang === 'ta' ? 'தொடங்க ➔' : 'Start ➔'}
+                    </div>
+                `;
+                card.onclick = () => startUnitQuiz(u.unit);
+                container.appendChild(card);
+            });
+        }
+
+        function toggleBrightness() {
+            brightnessState = (brightnessState + 1) % 3;
+            const btn = document.getElementById('theme-toggle-btn');
+            if (brightnessState === 0) {
+                document.body.classList.remove('light-mode');
+                document.body.style.filter = "brightness(100%)";
+                btn.innerText = "🍌";
+            } else if (brightnessState === 1) {
+                document.body.classList.add('light-mode');
+                document.body.style.filter = "brightness(100%)";
+                btn.innerText = "☀️";
+            } else {
+                document.body.classList.add('light-mode');
+                document.body.style.filter = "brightness(112%)";
+                btn.innerText = "🔆";
+            }
+        }
+
+        function updateProgressUI() {
+            const count = solvedSet.size;
+            const pct = Math.round((count / 160) * 100);
+            document.getElementById('progress-percent').innerText = `${pct}%`;
+            document.getElementById('progress-fill').style.width = `${pct}%`;
+            document.getElementById('progress-txt').innerText = currentLang === 'ta' ? `பயிற்சி முன்னேற்றம் (${count}/160 முடிந்தது)` : `Practice Progress (${count}/160 Solved)`;
+        }
+
+        function startUnitQuiz(unitNum) {
+            if (!checkStudentDetailsFilled()) {
+                showToast("⚠️ Please fill in Student Name and School Name first!", "⚠️ தயவுசெய்து மாணவர் பெயர் மற்றும் பள்ளிப் பெயரை முதலில் உள்ளிடவும்!");
+                goToDashboard();
+                return;
+            }
+            const u = csUnits.find(item => item.unit === unitNum);
+            activeQuestions = u.questions.map((q, i) => ({
+                ...q,
+                uid: `u${unitNum}_q${i}`,
+                unitNum: u.unit,
+                unitNameEn: u.name_en,
+                unitNameTa: u.name_ta,
+                bookQNo: i + 1
+            }));
+            currentModeObj = { type: 'unit', unitNum };
+            launchQuiz();
+        }
+
+        function startAllQuestionsMode() {
+            if (!checkStudentDetailsFilled()) {
+                showToast("⚠️ Please fill in Student Name and School Name first!", "⚠️ தயவுசெய்து மாணவர் பெயர் மற்றும் பள்ளிப் பெயரை முதலில் உள்ளிடவும்!");
+                return;
+            }
+            activeQuestions = [];
+            csUnits.forEach(u => {
+                u.questions.forEach((q, i) => {
+                    activeQuestions.push({
+                        ...q,
+                        uid: `u${u.unit}_q${i}`,
+                        unitNum: u.unit,
+                        unitNameEn: u.name_en,
+                        unitNameTa: u.name_ta,
+                        bookQNo: i + 1
+                    });
+                });
+            });
+            currentModeObj = { type: 'all' };
+            launchQuiz();
+        }
+
+        function startRandomChallenge(limit) {
+            if (!checkStudentDetailsFilled()) {
+                showToast("⚠️ Please fill in Student Name and School Name first!", "⚠️ தயவுசெய்து மாணவர் பெயர் மற்றும் பள்ளிப் பெயரை முதலில் உள்ளிடவும்!");
+                return;
+            }
+            let pool = [];
+            csUnits.forEach(u => {
+                u.questions.forEach((q, i) => {
+                    pool.push({
+                        ...q,
+                        uid: `u${u.unit}_q${i}`,
+                        unitNum: u.unit,
+                        unitNameEn: u.name_en,
+                        unitNameTa: u.name_ta,
+                        bookQNo: i + 1
+                    });
+                });
+            });
+            pool.sort(() => Math.random() - 0.5);
+            activeQuestions = pool.slice(0, limit);
+            currentModeObj = { type: 'random', limit };
+            launchQuiz();
+        }
+
+        function launchQuiz() {
+            currentIdx = 0;
+            sessionScore = 0;
+            sessionAnsweredMap = {};
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('lessons-selection-view').style.display = 'none';
+            document.getElementById('score-view').style.display = 'none';
+            document.getElementById('quiz-view').style.display = 'block';
+            renderCurrentQuestion(true);
+        }
+
+        function getActiveTitleText() {
+            if (currentModeObj.type === 'unit') {
+                const u = csUnits.find(item => item.unit === currentModeObj.unitNum);
+                return currentLang === 'ta' ? `பாடம் ${u.unit}: ${u.name_ta}` : `Unit ${u.unit}: ${u.name_en}`;
+            } else if (currentModeObj.type === 'all') {
+                return currentLang === 'ta' ? "அனைத்து 160 புத்தக வினாக்கள்" : "All 160 Book-Back Questions";
+            } else {
+                return currentModeObj.limit === 10
+                    ? (currentLang === 'ta' ? "விரைவு சவால் (10 வினாக்கள்)" : "Quick Challenge (10 Questions)")
+                    : (currentLang === 'ta' ? "மெகா சவால் (20 வினாக்கள்)" : "Mega Challenge (20 Questions)");
+            }
+        }
+
+        // Toggle Hint Box
+        function toggleHintBox() {
+            const box = document.getElementById('hint-content-box');
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // Render Question Number Strip (1, 2, 3...)
+        function renderQuestionNumberStrip() {
+            const strip = document.getElementById('q-number-strip');
+            strip.innerHTML = '';
+            // Show up to 25 dots around current index so it stays fast and clean even in 160 mode
+            const total = activeQuestions.length;
+            let start = 0;
+            let end = total;
+            if (total > 25) {
+                start = Math.max(0, currentIdx - 10);
+                end = Math.min(total, start + 25);
+            }
+
+            for (let i = start; i < end; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'q-num-dot' + (i === currentIdx ? ' active' : '') + (sessionAnsweredMap[i]?.isCorrect ? ' solved-dot' : '');
+                dot.innerText = i + 1;
+                dot.onclick = () => {
+                    currentIdx = i;
+                    renderCurrentQuestion(true);
+                };
+                strip.appendChild(dot);
+            }
+        }
+
+        // Render Current Question & Options (Respects currentLang immediately!)
+        function renderCurrentQuestion(resetHint = true) {
+            const qObj = activeQuestions[currentIdx];
+
+            // Update Top Sub-Navbar Student Details + Counter + Score
+            const stName = document.getElementById('st-name').value.trim() || "Student";
+            const stClass = document.getElementById('st-class').value.trim() || "12";
+            const stSec = document.getElementById('st-sec').value.trim();
+            const stSchool = document.getElementById('st-school').value.trim();
+
+            document.getElementById('quiz-student-meta').innerText = `${stName} (${stClass}${stSec ? '-' + stSec : ''})`;
+            document.getElementById('quiz-school-meta').innerText = stSchool ? ` • ${stSchool}` : '';
+            document.getElementById('quiz-q-counter').innerText = `${currentIdx + 1} / ${activeQuestions.length}`;
+            document.getElementById('quiz-score-live').innerText = `${currentLang === 'ta' ? 'மதிப்பெண்' : 'Score'}: ${sessionScore}`;
+
+            // Update Unit Pill inside Question Box
+            const unitLabel = currentLang === 'ta'
+                ? `⚡ பாடம் ${qObj.unitNum}: ${qObj.unitNameTa} • வினா ${qObj.bookQNo}`
+                : `⚡ Unit ${qObj.unitNum}: ${qObj.unitNameEn} • Book Q.${qObj.bookQNo}`;
+            document.getElementById('quiz-unit-title').innerText = unitLabel;
+
+            // Update Question Number & Question Text in selected language
+            const qPrefix = currentLang === 'ta' ? `வினா ${currentIdx + 1}. ` : `Q${currentIdx + 1}. `;
+            const qBody = currentLang === 'ta' ? qObj.q_ta : qObj.q_en;
+            document.getElementById('q-display-text').innerHTML = `<span class="q-num-prefix">${qPrefix}</span>${qBody}`;
+
+            // Update Hint Box text in selected language
+            document.getElementById('hint-box-text').innerText = currentLang === 'ta' ? qObj.hint_ta : qObj.hint_en;
+            if (resetHint) {
+                document.getElementById('hint-content-box').style.display = 'none';
+            }
+
+            // Prepare options in selected language (keep order stable if just toggling language, or shuffle on new question)
+            let rawOpts = (currentLang === 'ta') ? [...qObj.options_ta] : [...qObj.options_en];
+            if (!qObj._shuffledOrder) {
+                let order = [0, 1, 2, 3];
+                order.sort(() => Math.random() - 0.5);
+                qObj._shuffledOrder = order;
+            }
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const answeredState = sessionAnsweredMap[currentIdx];
+
+            qObj._shuffledOrder.forEach((origIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = rawOpts[origIdx];
+
+                if (answeredState && answeredState.isCorrect) {
+                    btn.disabled = true;
+                    if (origIdx === qObj.ans) btn.classList.add('correct');
+                } else if (answeredState && answeredState.wrongSet && answeredState.wrongSet.has(origIdx)) {
+                    btn.classList.add('wrong');
+                    btn.disabled = true;
+                }
+
+                btn.onclick = () => checkAnswer(origIdx, qObj.ans, btn);
+                container.appendChild(btn);
+            });
+
+            renderQuestionNumberStrip();
+
+            document.getElementById('prev-btn').disabled = (currentIdx === 0);
+            document.getElementById('next-btn').innerText = (currentIdx === activeQuestions.length - 1)
+                ? (currentLang === 'ta' ? 'முடிவு ✔' : 'Finish ✔')
+                : (currentLang === 'ta' ? 'அடுத்து ➡' : 'Next ➡');
+        }
+
+        function checkAnswer(selectedIdx, correctIdx, btnEl) {
+            const qObj = activeQuestions[currentIdx];
+            const allBtns = document.querySelectorAll('.opt-btn');
+
+            if (!sessionAnsweredMap[currentIdx]) {
+                sessionAnsweredMap[currentIdx] = { isCorrect: false, wrongSet: new Set() };
+            }
+
+            if (selectedIdx === correctIdx) {
+                allBtns.forEach(b => b.disabled = true);
+                btnEl.classList.add('correct');
+
+                if (!sessionAnsweredMap[currentIdx].isCorrect) {
+                    sessionAnsweredMap[currentIdx].isCorrect = true;
+                    sessionScore++;
+                    chocolates++;
+                    document.getElementById('choco-count').innerText = chocolates;
+                    document.getElementById('quiz-score-live').innerText = `${currentLang === 'ta' ? 'மதிப்பெண்' : 'Score'}: ${sessionScore}`;
+                    localStorage.setItem('cs_chocolates', chocolates);
+
+                    solvedSet.add(qObj.uid);
+                    localStorage.setItem('cs_solved_list', JSON.stringify([...solvedSet]));
+                    updateProgressUI();
+                    renderQuestionNumberStrip();
+                }
+
+                triggerStarAndChocolateShower();
+                playWinSound();
+            } else {
+                btnEl.classList.add('wrong');
+                btnEl.disabled = true;
+                sessionAnsweredMap[currentIdx].wrongSet.add(selectedIdx);
+                triggerPanda3Hits();
+            }
+        }
+
+        // SPEAKER: Reads ONLY the question text in selected language
+        function speakQuestionOnly() {
+            if (document.getElementById('quiz-view').style.display !== 'block') return;
+            window.speechSynthesis.cancel();
+            const qObj = activeQuestions[currentIdx];
+            const qText = (currentLang === 'ta') ? qObj.q_ta : qObj.q_en;
+            const utterance = new SpeechSynthesisUtterance(qText);
+            utterance.lang = (currentLang === 'ta') ? 'ta-IN' : 'en-IN';
+            utterance.rate = 0.95;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Right Answer Effect: Stars + Chocolates falling
+        function triggerStarAndChocolateShower() {
+            confetti({
+                particleCount: 55,
+                spread: 360,
+                ticks: 70,
+                shapes: ['star'],
+                colors: ['#facc15', '#fbbf24', '#38bdf8', '#4ade80']
+            });
+
+            const emojis = ['🍫', '⭐', '🍬', '🌟'];
+            for (let i = 0; i < 16; i++) {
+                const item = document.createElement('div');
+                item.className = 'falling-item';
+                item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                item.style.left = Math.random() * 92 + 'vw';
+                item.style.animationDuration = (1.5 + Math.random() * 1.2) + 's';
+                document.body.appendChild(item);
+                setTimeout(() => item.remove(), 2700);
+            }
+        }
+
+        // Wrong Answer Effect: Upgraded Panda Mallet Head-Bonk 3 times + "மீண்டும் முயற்சி செய்!"
+        function triggerPanda3Hits() {
+            const modal = document.getElementById('panda-modal');
+            const pandaGrp = modal.querySelector('.svg-panda-group');
+            const malletArm = modal.querySelector('.svg-mallet-arm');
+            const studentHead = modal.querySelector('.svg-student-head');
+            const bonkStars = modal.querySelector('.svg-bonk-stars');
+
+            document.getElementById('modal-title-text').innerText = "மீண்டும் முயற்சி செய்!";
+            document.getElementById('modal-sub-text').innerText = currentLang === 'ta'
+                ? "தவறான விடை! பாண்டா தலையில் 3 முறை அடிக்கிறது!"
+                : "Wrong Answer! Panda bonks on the head 3 times!";
+
+            // Restart SVG animations cleanly
+            [pandaGrp, malletArm, studentHead, bonkStars].forEach(el => {
+                el.style.animation = 'none';
+                void el.offsetHeight;
+                el.style.animation = '';
+            });
+
+            modal.style.display = 'flex';
+            playThreeBonkSounds();
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 2200);
+        }
+
+        function prevQuestion() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderCurrentQuestion(true);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentIdx < activeQuestions.length - 1) {
+                currentIdx++;
+                renderCurrentQuestion(true);
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function showFinalScore() {
+            document.getElementById('quiz-view').style.display = 'none';
+            document.getElementById('score-view').style.display = 'block';
+
+            const total = activeQuestions.length;
+            const name = document.getElementById('st-name').value || "Student";
+            const school = document.getElementById('st-school').value || "";
+            const titleText = getActiveTitleText();
+
+            document.getElementById('final-title').innerText = `${titleText} - ${currentLang === 'ta' ? 'முடிவடைந்தது!' : 'Completed!'}`;
+            document.getElementById('final-score-text').innerText = `${sessionScore} / ${total}`;
+            document.getElementById('final-student-info').innerText = `${name} ${school ? '• ' + school : ''} | ${currentLang === 'ta' ? 'மொத்த சாக்லேட்டுகள்:' : 'Total Chocolates:'} 🍫 ${chocolates}`;
+
+            const ratio = sessionScore / total;
+            document.getElementById('final-stars').innerText = ratio >= 0.8 ? "⭐⭐⭐⭐⭐" : ratio >= 0.5 ? "⭐⭐⭐" : "⭐⭐";
+            if (ratio >= 0.7) triggerStarAndChocolateShower();
+        }
+
+        function resumeQuizFromScore() {
+            document.getElementById('score-view').style.display = 'none';
+            document.getElementById('quiz-view').style.display = 'block';
+            renderCurrentQuestion(false);
+        }
+
+        function playWinSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.35);
+            } catch (e) {}
+        }
+
+        function playThreeBonkSounds() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                // Synced with 18%, 50%, 82% of 2.1s (~0.38s, 1.05s, 1.72s)
+                [0.36, 1.04, 1.72].forEach(delay => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(195, ctx.currentTime + delay);
+                    osc.frequency.exponentialRampToValueAtTime(58, ctx.currentTime + delay + 0.22);
+                    gain.gain.setValueAtTime(0.28, ctx.currentTime + delay);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + delay);
+                    osc.stop(ctx.currentTime + delay + 0.25);
+                });
+            } catch (e) {}
+        }
+    </script>
+</body>
+</html>
